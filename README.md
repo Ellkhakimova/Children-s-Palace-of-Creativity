@@ -1,2 +1,2 @@
-# gymnasium13
-Информационная система гимназии №13
+# Children-s-Palace-of-Creativity
+Дворец детского творчества
