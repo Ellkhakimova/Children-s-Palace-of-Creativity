@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 
 class Teacher(models.Model):
@@ -34,7 +35,7 @@ class Student(models.Model):
     birth_date = models.DateField()
     parent_name = models.CharField(max_length=100)
     parent_phone = models.CharField(max_length=20)
-    health_notes = models.TextField(blank=True)
+    #health_notes = models.TextField(blank=True)
 
     clubs = models.ManyToManyField(Club)
 
@@ -43,10 +44,26 @@ class Student(models.Model):
         ('approved', 'Подтверждено'),
         ('rejected', 'Отклонено'),
     ]
-    application_status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+    application_status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
 
     def __str__(self):
         return self.full_name
+
+    @property
+    def age(self):
+        """Вычисляет возраст студента на основе даты рождения"""
+        if not self.birth_date:
+            return 0
+        today = date.today()
+        age = today.year - self.birth_date.year
+        # Корректировка, если день рождения еще не наступил в этом году
+        if (today.month, today.day) < (self.birth_date.month, self.birth_date.day):
+            age -= 1
+        return age
 
 
 class Schedule(models.Model):
