@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор занятий | Дворец творчества</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #fef3e2;
+            font-family: 'Playfair Display', serif;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('лого.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .top-bar {
+            background-color: #E3950B;
+            width: 100%;
+            padding: 8px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .top-bar h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            font-style: italic;
+            color: #000000;
+            letter-spacing: 10px;
+            word-spacing: 17px;
+            white-space: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0 20px;
+        }
+
+        .nav-bar {
+            background-color: rgba(227, 149, 11, 0.53);
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 190px;
+            flex-wrap: wrap;
+            list-style: none;
+            padding: 0 20px;
+        }
+
+        .nav-buttons a {
+            text-decoration: none;
+            color: #000000;
+            font-family: 'Playfair Display', serif;
+            font-size: 25px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            padding: 10px 28px;
+            background-color: #E3950B;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-buttons a:hover {
+            background-color: #c07d09;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-home {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .back-home a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #000000;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 600;
+            background-color: #E3950B;
+            padding: 6px 18px;
+            border-radius: 40px;
+            transition: 0.3s;
+        }
+
+        .back-home a:hover {
+            background-color: #c07d09;
+            transform: translateX(-3px);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 42px;
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+            margin-bottom: 50px;
+        }
+
+        .activity-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .activity-icon {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            pointer-events: none;
+        }
+
+        .activity-card h3 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #E3950B;
+            margin-bottom: 10px;
+            pointer-events: none;
+        }
+
+        .activity-age {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 500;
+            pointer-events: none;
+        }
+
+        .activity-description {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            pointer-events: none;
+        }
+
+        .btn-signup {
+            display: inline-block;
+            background-color: #E3950B;
+            color: #000000;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 10px 25px;
+            border-radius: 40px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .btn-signup:hover {
+            background-color: #c07d09;
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .info-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .info-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 450px;
+            max-height: 95vh;
+            padding: 35px 30px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .info-modal-content {
+            background-color: #fff;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 95vh;
+            padding: 35px 30px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .modal-content::-webkit-scrollbar,
+        .info-modal-content::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .modal-content::-webkit-scrollbar-track,
+        .info-modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb,
+        .info-modal-content::-webkit-scrollbar-thumb {
+            background: #E3950B;
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover,
+        .info-modal-content::-webkit-scrollbar-thumb:hover {
+            background: #c07d09;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #E3950B;
+        }
+
+        .modal h2, .info-modal-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: #E3950B;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .info-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #E3950B;
+            margin-bottom: 10px;
+        }
+
+        .info-section p {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .schedule-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .schedule-list li {
+            padding: 5px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #E3950B;
+            box-shadow: 0 0 5px rgba(227, 149, 11, 0.3);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: #E3950B;
+            color: #000000;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 12px;
+            border-radius: 40px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: #c07d09;
+            transform: scale(1.02);
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .form-switch a {
+            color: #E3950B;
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .form-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden-form {
+            display: none;
+        }
+
+        @media (max-width: 1024px) {
+            .nav-buttons {
+                gap: 60px;
+            }
+            .nav-buttons a {
+                font-size: 22px;
+                padding: 8px 22px;
+            }
+            .page-title {
+                font-size: 36px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-bar h1 {
+                font-size: 24px;
+                letter-spacing: 1px;
+                word-spacing: 4px;
+                white-space: nowrap;
+            }
+            .nav-buttons {
+                gap: 15px;
+                flex-direction: column;
+                align-items: center;
+            }
+            .nav-buttons a {
+                font-size: 22px;
+                font-weight: 700;
+                padding: 8px 28px;
+                width: 200px;
+            }
+            .back-home {
+                position: static;
+                text-align: center;
+                margin-top: 10px;
+            }
+            .back-home a {
+                display: inline-flex;
+                justify-content: center;
+            }
+            .page-title {
+                font-size: 28px;
+                margin-top: 20px;
+            }
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-content, .info-modal-content {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="top-bar">
+        <h1>Children's Palace of Creativity</h1>
+        <div class="back-home">
+            <a href="index.html">← На главную</a>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <ul class="nav-buttons">
+            <li><a href="activities.html">Занятия</a></li>
+            <li><a href="#">Преподаватели</a></li>
+            <li><a href="#">О нас</a></li>
+            <li><a href="#" onclick="openModal(); return false;">Вход</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <h1 class="page-title">🎨 Выбери свой кружок 🎨</h1>
+
+        <div class="activities-grid">
+            <div class="activity-card" onclick="showActivityInfo('art')">
+                <img src="art.png"  alt="Рисование" class="activity-icon">
+                <h3>Изостудия</h3>
+                <div class="activity-age">4–12 лет</div>
+                <div class="activity-description">Рисование, живопись, лепка, акварель. Развиваем творческое мышление и мелкую моторику.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+
+            <div class="activity-card" onclick="showActivityInfo('music')">
+                <img src="guitar.png" alt="Гитара" class="activity-icon">
+                <h3>Игра на гитаре</h3>
+                <div class="activity-age">8–18 лет</div>
+                <div class="activity-description">Обучение игре на гитаре. Индивидуальный подход, изучение аккордов, техники игры, чтение нот. Репертуар подбирается с учётом интересов ученика.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+
+            <div class="activity-card" onclick="showActivityInfo('robotics')">
+                <img src="coala.png" alt="Робототехника" class="activity-icon">
+                <h3>Робототехника</h3>
+                <div class="activity-age">11–18 лет</div>
+                <div class="activity-description">Конструирование, программирование, создание роботов. Развиваем инженерное мышление.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+
+            <div class="activity-card" onclick="showActivityInfo('python')">
+                <img src="python.png" alt="Python" class="activity-icon">
+                <h3>Python для начинающих</h3>
+                <div class="activity-age">12–18 лет</div>
+                <div class="activity-description">Обучение языка программирования Python с нуля! Вы научитесь основам языка, изучите различные библиотеки и научитесь взаимодействовать с ними.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+
+
+            <div class="activity-card" onclick="showActivityInfo('theater')">
+                <img src="theater.png" alt="Театр" class="activity-icon">
+                <h3>Театральная студия</h3>
+                <div class="activity-age">8–16 лет</div>
+                <div class="activity-description">Актерское мастерство, сценическая речь, пластика, постановка спектаклей. Развиваем уверенность, эмоциональный интеллект и навыки публичных выступлений.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+
+            
+            <div class="activity-card" onclick="showActivityInfo('chess')">
+                <img src="chessboard.png" alt="Шахматы" class="activity-icon">
+                <h3>Шахматы</h3>
+                <div class="activity-age">7–18 лет</div>
+                <div class="activity-description">Развитие логического мышления, стратегического планирования и концентрации.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            
+            <div id="loginForm" class="form-container">
+                <h2>Вход</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input type="text" id="loginUsername" required placeholder="Введите имя пользователя">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-submit">Войти</button>
+                </form>
+                <div class="form-switch">
+                    Нет аккаунта? <a onclick="showRegister()">Зарегистрироваться</a>
+                </div>
+            </div>
+            
+            <div id="registerForm" class="form-container hidden-form">
+                <h2>Регистрация</h2>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input type="text" id="regUsername" required placeholder="Придумайте имя пользователя">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="regPassword" required placeholder="••••••••" oninput="checkPasswordStrength()">
+                        <small id="passwordHint" style="display: block; margin-top: 5px; font-size: 12px; color: #666;">Пароль должен быть не менее 8 символов</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Почта</label>
+                        <input type="email" id="regEmail" required placeholder="example@mail.ru">
+                    </div>
+                    <div class="form-group">
+                        <label>ФИО</label>
+                        <input type="text" id="regFullName" required placeholder="Иванов Иван Иванович">
+                    </div>
+                    <div class="form-group">
+                        <label>Дата рождения</label>
+                        <input type="date" id="regBirthDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ФИО родителя</label>
+                        <input type="text" id="regParentName" required placeholder="Иванова Ольга Петровна">
+                    </div>
+                    <div class="form-group">
+                        <label>Номер телефона родителя</label>
+                        <input type="tel" id="regPhone" required placeholder="+7 (XXX) XXX-XX-XX">
+                    </div>
+                    <button type="submit" class="btn-submit">Зарегистрироваться</button>
+                </form>
+                <div class="form-switch">
+                    Уже есть аккаунт? <a onclick="showLogin()">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="infoModal" class="info-modal">
+        <div class="info-modal-content">
+            <span class="close-modal" onclick="closeInfoModal()">&times;</span>
+            <div id="infoContent">
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        const activitiesData = {
+            art: {
+                name: "Изостудия",
+                age: "4–12 лет",
+                teacher: "Хакимова Эльза Алмазовна",
+                experience: "Стаж работы: 12 лет",
+                schedule: ["Вторник 12:00–13:00", "Суббота 12:00–13:00"],
+                description: "Рисование, живопись, лепка, акварель. Развиваем творческое мышление и мелкую моторику."
+            },
+            music: {
+                name: "Игра на гитаре",
+                age: "8–18 лет",
+                teacher: "Рябова Екатерина Алексеевна",
+                experience: "Стаж работы: 15 лет",
+                schedule: ["Среда 15:00–16:00", "Пятница 15:00–16:00"],
+                description: "Обучение игре на гитаре. Индивидуальный подход, изучение аккордов, техники игры, чтение нот. Репертуар подбирается с учётом интересов ученика."
+            },
+            robotics: {
+                name: "Робототехника",
+                age: "11–18 лет",
+                teacher: "Николаева Ольга Олеговна",
+                experience: "Стаж работы: 8 лет",
+                schedule: ["Среда 12:00–13:00", "Пятница 12:00–13:00"],
+                description: "Конструирование, программирование, создание роботов. Развиваем инженерное мышление."
+            },
+            python: {
+                name: "Python для начинающих",
+                age: "12–18 лет",
+                teacher: "Давыдова Камила Алексеевна",
+                experience: "Стаж работы: 6 лет",
+                schedule: ["Понедельник 13:00–14:00", "Четверг 13:00–14:00"],
+                description: "Обучение языка программирования Python с нуля! Вы научитесь основам языка, изучите различные библиотеки и научитесь взаимодействовать с ними."
+            },
+            theater: {
+                name: "Театральная студия",
+                age: "8–16 лет",
+                teacher: "Зайнуллина Эльвина Раушановна",
+                experience: "Стаж работы: 10 лет",
+                schedule: ["Понедельник 16:00–17:00", "Четверг 16:00–17:00"],
+                description: "Актерское мастерство, сценическая речь, пластика, постановка спектаклей. Развиваем уверенность, эмоциональный интеллект и навыки публичных выступлений."
+            },
+            chess: {
+                name: "Шахматы",
+                age: "7–18 лет",
+                teacher: "Саитова Алина Ильгизовна",
+                experience: "Стаж работы: 7 лет",
+                schedule: ["Вторник 15:00–16:00", "Суббота 15:00–16:00"],
+                description: "Развитие логического мышления, стратегического планирования и концентрации."
+            }
+        };
+
+        
+        function showActivityInfo(activityKey) {
+            const data = activitiesData[activityKey];
+            if (!data) return;
+            
+            const infoContent = document.getElementById('infoContent');
+            infoContent.innerHTML = `
+                <h2>${data.name}</h2>
+                <div class="info-section">
+                    <h3>📚 О кружке</h3>
+                    <p>${data.description}</p>
+                </div>
+                <div class="info-section">
+                    <h3>⌛ Возраст</h3>
+                    <p>${data.age}</p>
+                </div>
+                <div class="info-section">
+                    <h3>👩‍🏫 Преподаватель</h3>
+                    <p><strong>${data.teacher}</strong></p>
+                    <p>${data.experience}</p>
+                </div>
+                <div class="info-section">
+                    <h3>📅 Расписание</h3>
+                    <ul class="schedule-list">
+                        ${data.schedule.map(day => `<li>📌 ${day}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            
+            document.getElementById('infoModal').classList.add('active');
+        }
+
+        
+        function closeInfoModal() {
+            document.getElementById('infoModal').classList.remove('active');
+        }
+
+        
+        function openModal() {
+            const modal = document.getElementById('authModal');
+            if (modal) {
+                modal.classList.add('active');
+                showLogin();
+                const passwordHint = document.getElementById('passwordHint');
+                if (passwordHint) {
+                    passwordHint.style.color = '#666';
+                    passwordHint.innerHTML = 'Пароль должен быть не менее 8 символов';
+                }
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('authModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        function showLogin() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            if (loginForm && registerForm) {
+                loginForm.classList.remove('hidden-form');
+                registerForm.classList.add('hidden-form');
+            }
+        }
+
+        function showRegister() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            if (loginForm && registerForm) {
+                loginForm.classList.add('hidden-form');
+                registerForm.classList.remove('hidden-form');
+            }
+        }
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('regPassword').value;
+            const passwordHint = document.getElementById('passwordHint');
+            
+            if (password.length === 0) {
+                passwordHint.style.color = '#666';
+                passwordHint.innerHTML = 'Пароль должен быть не менее 8 символов';
+            } else if (password.length < 8) {
+                passwordHint.style.color = '#ff6b6b';
+                passwordHint.innerHTML = '⚠️ Пароль слишком короткий! Нужно не менее 8 символов';
+            } else {
+                passwordHint.style.color = '#4caf50';
+                passwordHint.innerHTML = '✓ Пароль подходит';
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            console.log('Вход:', username, password);
+            alert(`Добро пожаловать, ${username}!`);
+            closeModal();
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const email = document.getElementById('regEmail').value;
+            const fullName = document.getElementById('regFullName').value;
+            const birthDate = document.getElementById('regBirthDate').value;
+            const parentName = document.getElementById('regParentName').value;
+            const phone = document.getElementById('regPhone').value;
+            
+            if (password.length < 8) {
+                alert('Пароль должен содержать не менее 8 символов!');
+                return;
+            }
+            
+            console.log('Регистрация:', {username, password, email, fullName, birthDate, parentName, phone});
+            alert(`Пользователь ${username} успешно зарегистрирован!`);
+            closeModal();
+        }
+
+        window.onclick = function(event) {
+            const authModal = document.getElementById('authModal');
+            const infoModal = document.getElementById('infoModal');
+            if (event.target === authModal) {
+                closeModal();
+            }
+            if (event.target === infoModal) {
+                closeInfoModal();
+            }
+        }
+    </script>
+
+</body>
+</html>
