@@ -7,10 +7,7 @@ from .models import Teacher, Club, Student, Schedule
 
 
 class APITestCase(TestCase):
-    """Полный тест API"""
-
     def setUp(self):
-        """Подготовка тестовых данных"""
         self.client = APIClient()
 
         # Создаем преподавателя
@@ -60,7 +57,7 @@ class APITestCase(TestCase):
         """Тест: получение списка кружков"""
         response = self.client.get('/api/clubs/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data['results']), 1)  # Пагинация
+        self.assertEqual(len(response.data['results']), 1)
 
     def test_get_club_detail(self):
         """Тест: получение одного кружка"""
@@ -139,7 +136,7 @@ class APITestCase(TestCase):
         young_student = Student.objects.create(
             user=User.objects.create_user(username='young', password='pass'),
             full_name="Молодой",
-            birth_date=date(2020, 1, 1),  # 4 года (слишком молод для кружка 7+)
+            birth_date=date(2020, 1, 1),
             parent_name="Родитель",
             parent_phone="+7(999)000-00-00",
             application_status='pending'
@@ -149,9 +146,3 @@ class APITestCase(TestCase):
             'club_id': self.club.id
         }, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_student_profile_by_user_id(self):
-        """Тест: получение профиля по user_id"""
-        response = self.client.get(f'/api/students/by_user/?user_id={self.user.id}')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['full_name'], "Тестовый Студент")

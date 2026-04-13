@@ -106,7 +106,6 @@ class StudentViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
     def get_serializer_class(self):
-        """Выбираем сериализатор в зависимости от действия"""
         if self.action == 'create':
             return StudentCreateSerializer  # Для регистрации
         return StudentSerializer  # Для чтения
@@ -128,9 +127,7 @@ class StudentViewSet(viewsets.ModelViewSet):
         club_id = serializer.validated_data['club_id']
         club = get_object_or_404(Club, id=club_id)
 
-        # ========== ПРОВЕРКИ ==========
-
-        # Проверка 1: Существует ли студент? (уже есть, т.к. get_object)
+        # Проверка 1: Существует ли студент (уже есть, т.к. get_object)
 
         # Проверка 2: Возрастное ограничение
         if student.age < club.min_age:
@@ -141,7 +138,7 @@ class StudentViewSet(viewsets.ModelViewSet):
 
         if student.age > club.max_age:
             return Response(
-                {'error': f'Слишком стар. Максимальный возраст для кружка: {club.max_age} лет'},
+                {'error': f'Слишком взрослый. Максимальный возраст для кружка: {club.max_age} лет'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -159,7 +156,6 @@ class StudentViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Всё хорошо — записываем
         student.clubs.add(club)
 
         return Response({
@@ -167,26 +163,3 @@ class StudentViewSet(viewsets.ModelViewSet):
             'message': f'Вы успешно записаны на кружок "{club.name}"'
         }, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['get'])
-    def by_user(self, request):
-        """
-        Эндпоинт: GET /api/students/by_user/?user_id=1
-        Получает профиль студента по ID пользователя
-        """
-        user_id = request.query_params.get('user_id')
-        if not user_id:
-            return Response(
-                {'error': 'Параметр "user_id" обязателен'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        try:
-            student = Student.objects.get(user_id=user_id)
-        except Student.DoesNotExist:
-            return Response(
-                {'error': 'Студент не найден'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = self.get_serializer(student)
-        return Response(serializer.data)

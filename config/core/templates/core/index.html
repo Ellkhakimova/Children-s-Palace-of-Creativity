@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Children's Palace of Creativity</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Подключаем CSS -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <h1>Children's Palace of Creativity</h1>
+    </div>
+
+    <div class="nav-bar">
+        <ul class="nav-buttons">
+            <li><a href="{% url 'activities' %}">Занятия</a></li>
+            <li><a href="#">Преподаватели</a></li>
+            <li><a href="#">О нас</a></li>
+            <li><a href="#" onclick="openModal(); return false;">Вход</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="center-logo">
+            <img src="{% static 'core/images/лого.png' %}" alt="Дворец творчества">
+        </div>
+
+        <a href="{% url 'activities' %}" class="btn-circle">
+             ВЫБЕРИ СВОЙ КРУЖОК
+            <img src="{% static 'core/images/стрелка_переход.png' %}" alt="→">
+        </a>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            
+            <div id="loginForm" class="form-container">
+                <h2>Вход</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input type="text" id="loginUsername" required placeholder="Введите имя пользователя">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-submit">Войти</button>
+                </form>
+                <div class="form-switch">
+                    Нет аккаунта? <a onclick="showRegister()">Зарегистрироваться</a>
+                </div>
+            </div>
+            
+            <div id="registerForm" class="form-container hidden-form">
+                <h2>Регистрация</h2>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input type="text" id="regUsername" required placeholder="Придумайте имя пользователя">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="regPassword" required placeholder="••••••••" oninput="checkPasswordStrength()">
+                        <small id="passwordHint" style="display: block; margin-top: 5px; font-size: 12px; color: #666;">Пароль должен быть не менее 8 символов</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Почта</label>
+                        <input type="email" id="regEmail" required placeholder="example@mail.ru">
+                    </div>
+                    <div class="form-group">
+                        <label>ФИО</label>
+                        <input type="text" id="regFullName" required placeholder="Иванов Иван Иванович">
+                    </div>
+                    <div class="form-group">
+                        <label>Дата рождения</label>
+                        <input type="date" id="regBirthDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ФИО родителя</label>
+                        <input type="text" id="regParentName" required placeholder="Иванова Ольга Петровна">
+                    </div>
+                    <div class="form-group">
+                        <label>Номер телефона родителя</label>
+                        <input type="tel" id="regPhone" required placeholder="+7 (XXX) XXX-XX-XX">
+                    </div>
+                    <button type="submit" class="btn-submit">Зарегистрироваться</button>
+                </form>
+                <div class="form-switch">
+                    Уже есть аккаунт? <a onclick="showLogin()">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем JavaScript -->
+    <script src="{% static 'core/js/script.js' %}"></script>
+</body>
+</html>

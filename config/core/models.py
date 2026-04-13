@@ -35,7 +35,6 @@ class Student(models.Model):
     birth_date = models.DateField()
     parent_name = models.CharField(max_length=100)
     parent_phone = models.CharField(max_length=20)
-    #health_notes = models.TextField(blank=True)
 
     clubs = models.ManyToManyField(Club)
 
