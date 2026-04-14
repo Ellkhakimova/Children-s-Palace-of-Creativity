@@ -27,7 +27,13 @@
             <li><a href="{% url 'activities' %}">Занятия</a></li>
             <li><a href="#">Преподаватели</a></li>
             <li><a href="#">О нас</a></li>
-            <li><a href="#" onclick="openModal(); return false;">Вход</a></li>
+            <li>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account' %}">Аккаунт</a>
+                {% else %}
+                    <a href="#" onclick="openModal(); return false;">Вход</a>
+                {% endif %}
+            </li>
         </ul>
     </div>
 

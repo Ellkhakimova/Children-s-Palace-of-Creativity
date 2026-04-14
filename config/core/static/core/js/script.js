@@ -113,26 +113,33 @@ function handleLogin(event) {
 
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
-
-    // Получаем CSRF токен для POST запроса
-    fetch('/api-auth/login/')
     const csrftoken = getCookie('csrftoken');
 
-    fetch('/api-auth/login/', {
+    fetch('/api/login/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded','X-CSRFToken': csrftoken},
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
         credentials: 'same-origin',
-        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
-})
+        body: JSON.stringify({ username: username, password: password })
+    })
     .then(response => {
         if (response.ok) {
             console.log('LOGIN OK');
             alert(`Добро пожаловать, ${username}!`);
             closeModal();
+
             // Сохраняем имя пользователя
             localStorage.setItem('username', username);
-            // Получаем student_id по username
+
+            // Получаем student_id по username и ПОТОМ перенаправляем
             fetchStudentByUsername(username);
+
+            // Даем время сохраниться ID перед переходом
+            setTimeout(() => {
+                window.location.href = '/account/';
+            }, 500);
         } else {
             alert('Неверное имя пользователя или пароль');
         }
@@ -160,21 +167,32 @@ function getCookie(name) {
 }
 
 function fetchStudentByUsername(username) {
-    fetch(`/api/students/?search=${username}`)
+    console.log('Ищем студента с username:', username);
+
+    fetch('/api/students/')
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            if (data.results && data.results.length > 0) {
-                currentStudentId = data.results[0].id;
-                currentUserId = data.results[0].user?.id;
+            console.log('Все студенты:', data);
+            const students = data.results || data;
+            // Ищем студента по username (без @, потому что в API username приходит без @)
+            const cleanUsername = username.replace('@', '');
+            const student = students.find(s => s.user?.username === username || s.user?.username === cleanUsername);
+
+            if (student) {
+                currentStudentId = student.id;
+                currentUserId = student.user?.id;
                 localStorage.setItem('studentId', currentStudentId);
                 localStorage.setItem('userId', currentUserId);
-                console.log('Student ID:', currentStudentId);
+                localStorage.setItem('username', username);
+                console.log('✅ Student ID сохранен:', currentStudentId);
+                console.log('✅ Username сохранен:', username);
+            } else {
+                console.error('❌ Студент не найден для username:', username);
+                console.log('Доступные username в API:', students.map(s => s.user?.username));
             }
         })
         .catch(error => console.error('Ошибка получения студента:', error));
 }
-
 // ==================== API: ЗАГРУЗКА КРУЖКОВ ИЗ БД ====================
 function loadClubsFromAPI() {
     fetch('/api/clubs/')
