@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e28783db-cab1-49e5-826b-87fd8d6cc00d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/config/core/templates/core/account.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/config/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/config/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/core/static/core/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/core/static/core/js/script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/core/templates/core/activities.html" beforeDir="false" afterPath="$PROJECT_DIR$/config/core/templates/core/activities.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/core/templates/core/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/config/core/templates/core/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/core/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/core/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/core/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
