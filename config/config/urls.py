@@ -4,7 +4,5 @@ from core import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    path('', views.index),              # 👈 главная страница
-    path('api/', include('core.urls')), # 👈 все API
+    path('', include('core.urls')),
 ]
