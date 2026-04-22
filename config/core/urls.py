@@ -14,6 +14,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('activities/', views.activities, name='activities'),
     path('account/', views.account, name='account'),
+    path('schedule/', views.schedule, name='schedule'),
 
     # API маршруты
     path('api/', include(router.urls)),  # 👈 ВСЕ API ТЕПЕРЬ С ПРЕФИКСОМ api/

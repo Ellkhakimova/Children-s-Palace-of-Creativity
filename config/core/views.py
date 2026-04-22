@@ -101,6 +101,8 @@ def activities(request):
 def account(request):
     return render(request, 'core/account.html')
 
+def schedule(request):
+    return render(request, 'core/schedule.html')
 
 from django.contrib.auth import logout as auth_logout
 

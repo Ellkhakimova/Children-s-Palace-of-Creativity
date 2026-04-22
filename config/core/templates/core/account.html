@@ -91,6 +91,22 @@
             color: #e74c3c;
             padding: 40px;
         }
+        .schedule-link {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+        .schedule-link:hover {
+            background: #2980b9;
+        }
+        .btn-container {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +161,10 @@
                 <div id="myClubsList">
                     <div class="empty-message">Загрузка...</div>
                 </div>
+            </div>
+
+            <div class="btn-container">
+                <a href="{% url 'schedule' %}" class="schedule-link">📅 Моё расписание</a>
             </div>
 
             <button class="logout-btn" onclick="logout()">Выйти</button>

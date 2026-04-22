@@ -93,6 +93,8 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+
+
 class StudentViewSet(viewsets.ModelViewSet):
     """
     API для студентов.
@@ -162,4 +164,40 @@ class StudentViewSet(viewsets.ModelViewSet):
             'status': 'success',
             'message': f'Вы успешно записаны на кружок "{club.name}"'
         }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def schedule(self, request, pk=None):
+        """GET /api/students/{id}/schedule/ - возвращает расписание студента на неделю"""
+        student = self.get_object()
+
+        # Получаем все кружки студента
+        clubs = student.clubs.all()
+
+        # Получаем всё расписание для этих кружков
+        schedule_items = Schedule.objects.filter(club__in=clubs).select_related('club')
+
+        # Дни недели в правильном порядке
+        days_order = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        day_names = {
+            'Mon': 'Понедельник', 'Tue': 'Вторник', 'Wed': 'Среда',
+            'Thu': 'Четверг', 'Fri': 'Пятница', 'Sat': 'Суббота', 'Sun': 'Воскресенье'
+        }
+
+        result = []
+        for item in schedule_items:
+            result.append({
+                'day_of_week': item.day_of_week,
+                'day_name': day_names.get(item.day_of_week, item.day_of_week),
+                'start_time': item.start_time.strftime('%H:%M'),
+                'end_time': item.end_time.strftime('%H:%M'),
+                'room': item.room,
+                'club_name': item.club.name,
+                'club_id': item.club.id,
+                'teacher_name': item.club.teacher.full_name if item.club.teacher else ''
+            })
+
+        # Сортируем по дням недели
+        result.sort(key=lambda x: days_order.index(x['day_of_week']))
+
+        return Response(result)
 
