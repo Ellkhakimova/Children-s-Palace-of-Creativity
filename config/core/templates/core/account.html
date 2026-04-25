@@ -4,133 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Личный кабинет | Дворец творчества</title>
-
+    <title>Личный кабинет | Детский дворец творчества</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
-    <style>
-        .account-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .account-header {
-            text-align: center;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        .account-header h2 {
-            color: #2c3e50;
-            font-size: 28px;
-        }
-        .account-info {
-            margin-bottom: 30px;
-        }
-        .info-row {
-            display: flex;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .info-label {
-            width: 150px;
-            font-weight: 600;
-            color: #555;
-        }
-        .info-value {
-            flex: 1;
-            color: #333;
-        }
-        .my-clubs {
-            margin-top: 30px;
-        }
-        .my-clubs h3 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-        .club-item {
-            background: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .club-name {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .logout-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 30px;
-            width: 100%;
-        }
-        .logout-btn:hover {
-            background: #c0392b;
-        }
-        .empty-message {
-            text-align: center;
-            color: #999;
-            padding: 40px;
-        }
-        .error-message {
-            text-align: center;
-            color: #e74c3c;
-            padding: 40px;
-        }
-        .schedule-link {
-            display: inline-block;
-            background: #3498db;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 16px;
-            margin: 20px 0;
-        }
-        .schedule-link:hover {
-            background: #2980b9;
-        }
-        .btn-container {
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
 
     <div class="top-bar">
-        <h1>Children's Palace of Creativity</h1>
-        <div class="back-home">
-            <a href="{% url 'index' %}">← На главную</a>
+        <div class="top-bar-container">
+            <div class="logo-area">
+                <h1>Детский дворец творчества</h1>
+            </div>
+            <div class="auth-area">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account' %}" class="btn-auth">Аккаунт</a>
+                {% else %}
+                    <a href="#" onclick="openModal(); return false;" class="btn-auth">Вход</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 
-    <div class="nav-bar">
-        <ul class="nav-buttons">
-            <li><a href="{% url 'activities' %}">Занятия</a></li>
-            <li><a href="#">Преподаватели</a></li>
-            <li><a href="#">О нас</a></li>
-            <li><a href="#" id="accountBtn">Аккаунт</a></li>
-        </ul>
+    <div class="back-home-container">
+        <a href="{% url 'index' %}" class="back-home-btn">← На главную</a>
     </div>
 
     <div class="main-content">
-        <div class="account-container" id="accountContainer">
+        <div class="account-container">
             <div class="account-header">
-                <h2>👤 Личный кабинет</h2>
+                <h2> Личный кабинет</h2>
             </div>
 
             <div class="account-info" id="userInfo">
@@ -157,42 +61,61 @@
             </div>
 
             <div class="my-clubs">
-                <h3>📚 Мои кружки</h3>
+                <h3> Мои кружки</h3>
                 <div id="myClubsList">
                     <div class="empty-message">Загрузка...</div>
                 </div>
             </div>
 
             <div class="btn-container">
-                <a href="{% url 'schedule' %}" class="schedule-link">📅 Моё расписание</a>
+                <a href="{% url 'schedule' %}" class="schedule-link"> Моё расписание</a>
             </div>
 
             <button class="logout-btn" onclick="logout()">Выйти</button>
         </div>
     </div>
 
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>📞 Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                <p>✉️ Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
+                <p>🏠 Адрес: г. Название, ул. Примерная, д. 1</p>
+            </div>
+            <div class="footer-section">
+                <h3>Режим работы</h3>
+                <p>🕐 Пн-Пт: 09:00 - 20:00</p>
+                <p>🕐 Сб: 10:00 - 16:00</p>
+                <p>🕐 Вс: выходной</p>
+            </div>
+            <div class="footer-section">
+                <h3>О нас</h3>
+                <p>Дворец детского творчества — место, где каждый ребенок может раскрыть свой талант. Мы предлагаем более 30 кружков и секций для детей от 4 до 18 лет.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Детский дворец творчества. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'core/js/script.js' %}"></script>
     <script>
         const studentId = localStorage.getItem('studentId');
         const username = localStorage.getItem('username');
 
-        // Проверка авторизации - если нет studentId, перенаправляем на главную
         if (!studentId || studentId === 'null') {
             window.location.href = '/';
         }
 
-        // Функция загрузки данных студента
         function loadStudentData() {
-            // Дополнительная проверка перед запросом
             if (!studentId || studentId === 'null') {
-                document.getElementById('myClubsList').innerHTML = '<div class="error-message">Ошибка: вы не авторизованы. <a href="/">Вернуться на главную</a></div>';
+                document.getElementById('myClubsList').innerHTML = '<div class="error-message">Ошибка: вы не авторизованы.</div>';
                 return;
             }
-
             fetch(`/api/students/${studentId}/`)
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Студент не найден');
-                    }
+                    if (!response.ok) throw new Error('Студент не найден');
                     return response.json();
                 })
                 .then(data => {
@@ -204,8 +127,8 @@
                     loadStudentClubs(data.clubs || []);
                 })
                 .catch(error => {
-                    console.error('Ошибка загрузки данных:', error);
-                    document.getElementById('myClubsList').innerHTML = '<div class="error-message">Ошибка загрузки данных. Возможно, вы не авторизованы.</div>';
+                    console.error(error);
+                    document.getElementById('myClubsList').innerHTML = '<div class="error-message">Ошибка загрузки данных</div>';
                 });
         }
 
@@ -215,11 +138,10 @@
                 container.innerHTML = '<div class="empty-message">Вы ещё не записаны ни на один кружок</div>';
                 return;
             }
-
             container.innerHTML = clubs.map(club => `
                 <div class="club-item">
                     <span class="club-name">🎨 ${club.name}</span>
-                    <span>${club.min_age}–${club.max_age} лет</span>
+                    <span class="club-age">${club.min_age}–${club.max_age} лет</span>
                 </div>
             `).join('');
         }
@@ -227,10 +149,7 @@
         function logout() {
             fetch('/api/logout/', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                }
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') }
             })
             .then(() => {
                 localStorage.removeItem('studentId');
@@ -256,7 +175,6 @@
             return cookieValue;
         }
 
-        // Загрузка при открытии страницы
         loadStudentData();
     </script>
 </body>
