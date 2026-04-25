@@ -1,3 +1,27 @@
+@font-face {
+    font-family: 'CartonSixRUS-Regular';
+    src: url('../fonts/CartonSixRUS-Regular.ttf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Calibri';
+    src: url('../fonts/calibri.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Calibri';
+    src: url('../fonts/calibri_bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,8 +29,8 @@
 }
 
 body {
-    background-color: #fef3e2;
-    font-family: 'Cormorant Garamond', serif;
+    background-color: #FEF7ED;
+    font-family: 'Calibri', 'Cormorant Garamond', sans-serif;
 }
 
 body::before {
@@ -25,70 +49,109 @@ body::before {
     pointer-events: none;
 }
 
+
+/* ========== ВЕРХНЯЯ ПАНЕЛЬ (название слева, вход справа) ========== */
 .top-bar {
-    background-color: #E3950B;
+    background-color: #DDB571;
     width: 100%;
-    padding: 8px 0;
-    text-align: center;
-    position: relative; 
+    padding: 12px 40px;
+    position: relative;
 }
 
-.top-bar h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 48px;
-    font-weight: 700;
-    font-style: italic;
-    color: #000000;
-    letter-spacing: 10px;
-    word-spacing: 17px;
+.top-bar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo-area {
+    flex: 1;
+    text-align: left;
+}
+
+.logo-area h1 {
+    font-family: 'CartonSixRUS-Regular', cursive;
+    font-size: 42px;
+    font-weight: 400;
+    color: #2C2C2C;
+    letter-spacing: 2px;
+    margin: 0;
+    text-align: left;
     white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 0 20px;
 }
 
+.auth-area {
+    flex-shrink: 0;
+}
+
+.btn-auth {
+    display: inline-block;
+    font-family: 'Calibri', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #2C2C2C;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+}
+
+.btn-auth:hover {
+    color: #B8865A;
+    border-bottom-color: #B8865A;
+    transform: translateY(-1px);
+}
+
+/* Убираем старые медиа-запросы для top-bar, если они есть */
 @media (max-width: 900px) {
-    .top-bar h1 {
-        font-size: 32px;
-        letter-spacing: 1px;
-        word-spacing: 4px;
-        white-space: nowrap;
+    .logo-area h1 {
+        font-size: 28px;
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .top-bar {
+        padding: 12px 20px;
     }
 }
 
+
 .nav-bar {
-    background-color: rgba(227, 149, 11, 0.53);
+    background-color: #F5E6D3;
     width: 100%;
-    padding: 20px 0;
+    padding: 16px 0;
     text-align: center;
 }
 
 .nav-buttons {
     display: flex;
     justify-content: center;
-    gap: 190px;
+    gap: 80px;
     flex-wrap: wrap;
     list-style: none;
     padding: 0 20px;
 }
 
 .nav-buttons a {
-    font-family: 'Playfair Display', serif;
-    font-size: 25px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    padding: 10px 28px;
-    background-color: #E3950B;
+    font-family: 'Calibri', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    padding: 8px 24px;
+    background-color: #DDB571;
     border-radius: 12px;
     transition: all 0.3s ease;
     display: inline-block;
     text-decoration: none;
-    color: #000000;
+    color: #2C2C2C;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .nav-buttons a:hover {
-    background-color: #c07d09;
+    background-color: #C49A6C;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
@@ -115,14 +178,14 @@ body::before {
 .btn-circle {
     display: inline-flex;
     align-items: center;
-    gap: 18px;
-    background-color: #E3950B;
-    color: #000000;
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
-    font-weight: 900;
-    letter-spacing: 1.5px;
-    padding: 10px 38px;
+    gap: 14px;
+    background-color: #DDB571;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 8px 32px;
     border-radius: 40px;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -133,14 +196,14 @@ body::before {
 }
 
 .btn-circle:hover {
-    background-color: #c07d09;
+    background-color: #C49A6C;
     transform: scale(1.05);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
 .btn-circle img {
-    width: 52px;
-    height: 52px;
+    width: 42px;
+    height: 42px;
     transition: transform 0.3s ease;
 }
 
@@ -189,12 +252,12 @@ body::before {
 }
 
 .modal-content::-webkit-scrollbar-thumb {
-    background: #E3950B;
+    background: #DDB571;
     border-radius: 10px;
 }
 
 .modal-content::-webkit-scrollbar-thumb:hover {
-    background: #c07d09;
+    background: #C49A6C;
 }
 
 @keyframes fadeIn {
@@ -219,14 +282,14 @@ body::before {
 }
 
 .close-modal:hover {
-    color: #E3950B;
+    color: #DDB571;
 }
 
 .modal h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 800;
-    color: #E3950B;
+    font-family: 'Calibri', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #DDB571;
     text-align: center;
     margin-bottom: 25px;
 }
@@ -237,8 +300,8 @@ body::before {
 
 .form-group label {
     display: block;
-    font-family: 'Playfair Display', serif;
-    font-size: 16px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 15px;
     font-weight: 600;
     margin-bottom: 8px;
     color: #333;
@@ -246,9 +309,9 @@ body::before {
 
 .form-group input {
     width: 100%;
-    padding: 12px 15px;
-    font-family: 'Playfair Display', serif;
-    font-size: 16px;
+    padding: 10px 14px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 15px;
     border: 1px solid #ddd;
     border-radius: 25px;
     transition: 0.3s;
@@ -256,18 +319,18 @@ body::before {
 
 .form-group input:focus {
     outline: none;
-    border-color: #E3950B;
-    box-shadow: 0 0 5px rgba(227, 149, 11, 0.3);
+    border-color: #DDB571;
+    box-shadow: 0 0 5px rgba(212, 163, 115, 0.3);
 }
 
 .btn-submit {
     width: 100%;
-    background-color: #E3950B;
-    color: #000000;
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 700;
-    padding: 12px;
+    background-color: #DDB571;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
     border-radius: 40px;
     border: none;
     cursor: pointer;
@@ -276,19 +339,19 @@ body::before {
 }
 
 .btn-submit:hover {
-    background-color: #c07d09;
+    background-color: #C49A6C;
     transform: scale(1.02);
 }
 
 .form-switch {
     text-align: center;
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 13px;
     color: #666;
 }
 
 .form-switch a {
-    color: #E3950B;
+    color: #DDB571;
     text-decoration: none;
     font-weight: 700;
     cursor: pointer;
@@ -307,19 +370,19 @@ body::before {
         gap: 60px;
     }
     .nav-buttons a {
-        font-size: 22px;
-        padding: 8px 22px;
+        font-size: 18px;
+        padding: 6px 20px;
     }
     .center-logo img {
         width: 350px;
     }
     .btn-circle {
-        font-size: 22px;
-        padding: 14px 32px;
+        font-size: 18px;
+        padding: 10px 28px;
     }
     .btn-circle img {
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
     }
 }
 
@@ -335,19 +398,19 @@ body::before {
         align-items: center;
     }
     .nav-buttons a {
-        font-size: 22px;
-        font-weight: 700;
+        font-size: 18px;
+        font-weight: bold;
         padding: 8px 28px;
         width: 200px;
     }
     .btn-circle {
-        font-size: 18px;
-        padding: 12px 24px;
-        gap: 12px;
+        font-size: 16px;
+        padding: 10px 20px;
+        gap: 10px;
     }
     .btn-circle img {
-        width: 30px;
-        height: 30px;
+        width: 28px;
+        height: 28px;
     }
     .center-logo img {
         width: 280px;
@@ -371,18 +434,18 @@ body::before {
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    color: #000000;
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 600;
-    background-color: #E3950B;
-    padding: 6px 18px;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #DDB571;
+    padding: 5px 16px;
     border-radius: 40px;
     transition: 0.3s;
 }
 
 .back-home a:hover {
-    background-color: #c07d09;
+    background-color: #C49A6C;
     transform: translateX(-3px);
 }
 
@@ -394,11 +457,12 @@ body::before {
 
 .page-title {
     text-align: center;
-    font-size: 42px;
-    font-weight: 800;
-    color: #000000;
-    margin-bottom: 50px;
-    letter-spacing: 2px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    color: #2C2C2C;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
 }
 
 .activities-grid {
@@ -424,23 +488,25 @@ body::before {
 }
 
 .activity-icon {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     object-fit: contain;
     margin-bottom: 20px;
     pointer-events: none;
 }
 
 .activity-card h3 {
-    font-size: 28px;
-    font-weight: 800;
-    color: #E3950B;
+    font-family: 'Calibri', sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    color: #DDB571;
     margin-bottom: 10px;
     pointer-events: none;
 }
 
 .activity-age {
-    font-size: 16px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
     color: #666;
     margin-bottom: 15px;
     font-weight: 500;
@@ -448,7 +514,8 @@ body::before {
 }
 
 .activity-description {
-    font-size: 16px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
     color: #333;
     line-height: 1.5;
     margin-bottom: 20px;
@@ -457,12 +524,12 @@ body::before {
 
 .btn-signup {
     display: inline-block;
-    background-color: #E3950B;
-    color: #000000;
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 700;
-    padding: 10px 25px;
+    background-color: #DDB571;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 22px;
     border-radius: 40px;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -472,7 +539,7 @@ body::before {
 }
 
 .btn-signup:hover {
-    background-color: #c07d09;
+    background-color: #C49A6C;
     transform: scale(1.05);
 }
 
@@ -517,12 +584,12 @@ body::before {
 }
 
 .info-modal-content::-webkit-scrollbar-thumb {
-    background: #E3950B;
+    background: #DDB571;
     border-radius: 10px;
 }
 
 .info-modal-content::-webkit-scrollbar-thumb:hover {
-    background: #c07d09;
+    background: #C49A6C;
 }
 
 .info-section {
@@ -532,15 +599,16 @@ body::before {
 }
 
 .info-section h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: #E3950B;
+    font-family: 'Calibri', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #DDB571;
     margin-bottom: 10px;
 }
 
 .info-section p {
-    font-size: 16px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
     color: #333;
     line-height: 1.5;
 }
@@ -552,7 +620,8 @@ body::before {
 
 .schedule-list li {
     padding: 5px 0;
-    font-size: 16px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
     color: #333;
 }
 
@@ -561,11 +630,11 @@ body::before {
         gap: 60px;
     }
     .nav-buttons a {
-        font-size: 22px;
-        padding: 8px 22px;
+        font-size: 18px;
+        padding: 6px 20px;
     }
     .page-title {
-        font-size: 36px;
+        font-size: 28px;
     }
 }
 
@@ -582,8 +651,8 @@ body::before {
         align-items: center;
     }
     .nav-buttons a {
-        font-size: 22px;
-        font-weight: 700;
+        font-size: 18px;
+        font-weight: bold;
         padding: 8px 28px;
         width: 200px;
     }
@@ -597,7 +666,7 @@ body::before {
         justify-content: center;
     }
     .page-title {
-        font-size: 28px;
+        font-size: 24px;
         margin-top: 20px;
     }
     .activities-grid {
@@ -606,4 +675,314 @@ body::before {
     .modal-content, .info-modal-content {
         padding: 25px 20px;
     }
+}
+
+/* ========== ОСНОВНОЙ ГЕРОЙ-БЛОК (фото + текст) ========== */
+.hero-section {
+    width: 100%;
+    min-height: calc(100vh - 150px); /* Высота от шапки до подвала */
+    display: flex;
+    align-items: center;
+    background-color: #FEF7ED;
+}
+
+.hero-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    width: 100%;
+}
+
+.hero-image {
+    flex: 1;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.hero-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.hero-image img:hover {
+    transform: scale(1.02);
+}
+
+.hero-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.hero-content h2 {
+    font-family: 'CartonSixRUS-Regular', cursive;
+    font-size: 48px;
+    color: #2C2C2C;
+    margin-bottom: 25px;
+    line-height: 1.2;
+}
+
+.hero-content .highlight {
+    color: #DDB571;
+    display: inline-block;
+}
+
+.hero-description {
+    font-family: 'Calibri', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #444;
+    margin-bottom: 30px;
+}
+
+.stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-number {
+    font-family: 'CartonSixRUS-Regular', cursive;
+    font-size: 36px;
+    font-weight: bold;
+    color: #DDB571;
+}
+
+.stat-label {
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #DDB571;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 14px 32px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #C49A6C;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary img {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.btn-primary:hover img {
+    transform: translateX(5px);
+}
+
+/* ========== ПОДВАЛ (FOOTER) ========== */
+.footer {
+    background-color: #2C2C2C;
+    color: #F5E6D3;
+    margin-top: 0;
+    font-family: 'Calibri', sans-serif;
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 40px 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-section h3 {
+    font-family: 'Calibri', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #DDB571;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #E0E0E0;
+    margin-bottom: 8px;
+}
+
+.footer-section a {
+    color: #DDB571;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #C49A6C;
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    background-color: #1A1A1A;
+    text-align: center;
+    padding: 15px 20px;
+    font-size: 12px;
+    color: #999;
+    border-top: 1px solid #3A3A3A;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+/* ========== КНОПКА "НА ГЛАВНУЮ" (для страницы activities) ========== */
+.back-home-container {
+    max-width: 1400px;
+    margin: 20px auto 0;
+    padding: 0 40px;
+}
+
+.back-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #2C2C2C;
+    text-decoration: none;
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.back-home-btn:hover {
+    color: #B8865A;
+    border-bottom-color: #B8865A;
+    transform: translateX(-3px);
+}
+
+/* ========== ОСНОВНОЙ КОНТЕНТ (activities) ========== */
+.main-content {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 40px;
+}
+
+.page-title {
+    text-align: center;
+    font-family: 'CartonSixRUS-Regular', cursive;
+    font-size: 48px;
+    color: #2C2C2C;
+    margin-bottom: 50px;
+    letter-spacing: 2px;
+}
+
+/* Сетка карточек */
+.activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 35px;
+    margin-bottom: 50px;
+}
+
+.activity-card {
+    background-color: #F5E6D3;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.activity-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.activity-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    pointer-events: none;
+}
+
+.activity-card h3 {
+    font-family: 'Calibri', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #DDB571;
+    margin-bottom: 10px;
+    pointer-events: none;
+}
+
+.activity-age {
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.activity-description {
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    pointer-events: none;
+}
+
+.btn-signup {
+    display: inline-block;
+    background-color: #DDB571;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.btn-signup:hover {
+    background-color: #C49A6C;
+    transform: scale(1.05);
 }

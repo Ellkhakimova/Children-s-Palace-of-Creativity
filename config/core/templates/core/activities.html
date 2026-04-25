@@ -15,30 +15,29 @@
 </head>
 <body>
     
+    <!-- Верхняя панель: название слева, вход/аккаунт справа -->
     <div class="top-bar">
-        <h1>Children's Palace of Creativity</h1>
-        <div class="back-home">
-            <a href="{% url 'index' %}">← На главную</a>
+        <div class="top-bar-container">
+            <div class="logo-area">
+                <h1>Детский дворец творчества</h1>
+            </div>
+            <div class="auth-area">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account' %}" class="btn-auth">Аккаунт</a>
+                {% else %}
+                    <a href="#" onclick="openModal(); return false;" class="btn-auth">Вход</a>
+                {% endif %}
+            </div>
         </div>
     </div>
 
-    <div class="nav-bar">
-        <ul class="nav-buttons">
-            <li><a href="{% url 'activities' %}">Занятия</a></li>
-            <li><a href="#">Преподаватели</a></li>
-            <li><a href="#">О нас</a></li>
-            <li>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'account' %}">Аккаунт</a>
-                {% else %}
-                    <a href="#" onclick="openModal(); return false;">Вход</a>
-                {% endif %}
-            </li>
-        </ul>
+    <!-- Кнопка "На главную" отдельным блоком (смещена ниже) -->
+    <div class="back-home-container">
+        <a href="{% url 'index' %}" class="back-home-btn">← На главную</a>
     </div>
 
     <div class="main-content">
-        <h1 class="page-title">🎨 Выбери свой кружок 🎨</h1>
+        <h1 class="page-title">Выбери свой кружок</h1>
 
         <div class="activities-grid">
             <div class="activity-card" onclick="showActivityInfo('art')">
@@ -90,6 +89,31 @@
             </div>
         </div>
     </div>
+
+    <!-- ПОДВАЛ (footer) как на лендинге -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>📞 Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                <p>✉️ Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
+                <p>🏠 Адрес: г. Название, ул. Примерная, д. 1</p>
+            </div>
+            <div class="footer-section">
+                <h3>Режим работы</h3>
+                <p>🕐 Пн-Пт: 09:00 - 20:00</p>
+                <p>🕐 Сб: 10:00 - 16:00</p>
+                <p>🕐 Вс: выходной</p>
+            </div>
+            <div class="footer-section">
+                <h3>О нас</h3>
+                <p>Дворец детского творчества — место, где каждый ребенок может раскрыть свой талант. Мы предлагаем более 30 кружков и секций для детей от 4 до 18 лет.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Детский дворец творчества. Все права защищены.</p>
+        </div>
+    </footer>
 
     <!-- Модальное окно для авторизации -->
     <div id="authModal" class="modal">

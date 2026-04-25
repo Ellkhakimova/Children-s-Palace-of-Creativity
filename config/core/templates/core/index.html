@@ -4,52 +4,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Children's Palace of Creativity</title>
+    <title>Детский дворец творчества</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Подключаем CSS -->
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
 </head>
 <body>
 
+    <!-- Верхняя панель: название слева, вход справа -->
     <div class="top-bar">
-        <h1>Children's Palace of Creativity</h1>
-    </div>
-
-    <div class="nav-bar">
-        <ul class="nav-buttons">
-            <li><a href="{% url 'activities' %}">Занятия</a></li>
-            <li><a href="#">Преподаватели</a></li>
-            <li><a href="#">О нас</a></li>
-            <li>
+        <div class="top-bar-container">
+            <div class="logo-area">
+                <h1>Детский дворец творчества</h1>
+            </div>
+            <div class="auth-area">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'account' %}">Аккаунт</a>
+                    <a href="{% url 'account' %}" class="btn-auth">Аккаунт</a>
                 {% else %}
-                    <a href="#" onclick="openModal(); return false;">Вход</a>
+                    <a href="#" onclick="openModal(); return false;" class="btn-auth">Вход</a>
                 {% endif %}
-            </li>
-        </ul>
-    </div>
-
-    <div class="main-content">
-        <div class="center-logo">
-            <img src="{% static 'core/images/лого.png' %}" alt="Дворец творчества">
+            </div>
         </div>
-
-        <a href="{% url 'activities' %}" class="btn-circle">
-             ВЫБЕРИ СВОЙ КРУЖОК
-            <img src="{% static 'core/images/стрелка_переход.png' %}" alt="→">
-        </a>
     </div>
+
+    <!-- ГЛАВНЫЙ БЛОК: фото слева, текст справа -->
+    <div class="hero-section">
+        <div class="hero-container">
+            <div class="hero-image">
+                <img src="{% static 'core/images/little-girl-learning-how-paint.jpg' %}" alt="Девочка рисует">
+            </div>
+            <div class="hero-content">
+                <h2>Раскрываем таланты <span class="highlight">с 2010 года</span></h2>
+                <p class="hero-description">
+                    Детский дворец творчества — это место, где каждый ребенок находит себя.
+                    Более <strong>30 кружков и секций</strong>: рисование, музыка, танцы, робототехника, театр и многое другое.
+                </p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-number">1000+</span>
+                        <span class="stat-label">довольных родителей</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">30+</span>
+                        <span class="stat-label">кружков и секций</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">15</span>
+                        <span class="stat-label">лет опыта</span>
+                    </div>
+                </div>
+                <a href="{% url 'activities' %}" class="btn-primary">
+                    Записаться на кружок
+                    <img src="{% static 'core/images/стрелка_переход.png' %}" alt="→">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ПОДВАЛ (footer) -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>📞 Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                <p>✉️ Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
+                <p>🏠 Адрес: г. Название, ул. Примерная, д. 1</p>
+            </div>
+            <div class="footer-section">
+                <h3>Режим работы</h3>
+                <p>🕐 Пн-Пт: 09:00 - 20:00</p>
+                <p>🕐 Сб: 10:00 - 16:00</p>
+                <p>🕐 Вс: выходной</p>
+            </div>
+            <div class="footer-section">
+                <h3>О нас</h3>
+                <p>Дворец детского творчества — место, где каждый ребенок может раскрыть свой талант. Мы предлагаем более 30 кружков и секций для детей от 4 до 18 лет.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Детский дворец творчества. Все права защищены.</p>
+        </div>
+    </footer>
 
     <!-- Модальное окно -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
-            
+
             <div id="loginForm" class="form-container">
                 <h2>Вход</h2>
                 <form onsubmit="handleLogin(event)">
@@ -67,7 +112,7 @@
                     Нет аккаунта? <a onclick="showRegister()">Зарегистрироваться</a>
                 </div>
             </div>
-            
+
             <div id="registerForm" class="form-container hidden-form">
                 <h2>Регистрация</h2>
                 <form onsubmit="handleRegister(event)">
@@ -109,7 +154,6 @@
         </div>
     </div>
 
-    <!-- Подключаем JavaScript -->
     <script src="{% static 'core/js/script.js' %}"></script>
 </body>
 </html>
