@@ -222,9 +222,12 @@ function displayClubs(clubs) {
         // Определяем иконку по названию кружка (можно расширить)
         const iconMap = {
             'изостудия': 'art.png',
+            'игра на гитаре': 'guitar.png',
             'гитара': 'guitar.png',
             'робототехника': 'coala.png',
+            'язык python для начинающих': 'python.png',
             'python': 'python.png',
+            'театральная студия': 'theater.png',
             'театр': 'theater.png',
             'шахматы': 'chessboard.png'
         };

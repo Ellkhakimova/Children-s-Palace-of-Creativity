@@ -201,3 +201,42 @@ class StudentViewSet(viewsets.ModelViewSet):
 
         return Response(result)
 
+    @action(detail=True, methods=['post'])
+    def cancel_enroll(self, request, pk=None):
+        """
+        Эндпоинт: POST /api/students/{id}/cancel_enroll/
+        Тело запроса: {"club_id": 1}
+        Отменяет запись студента на кружок
+        """
+        student = self.get_object()
+        club_id = request.data.get('club_id')
+
+        if not club_id:
+            return Response(
+                {'error': 'Не указан ID кружка'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            club = Club.objects.get(id=club_id)
+        except Club.DoesNotExist:
+            return Response(
+                {'error': 'Кружок не найден'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Проверяем, записан ли студент на этот кружок
+        if not student.clubs.filter(id=club.id).exists():
+            return Response(
+                {'error': f'Вы не записаны на кружок "{club.name}"'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Отменяем запись
+        student.clubs.remove(club)
+
+        return Response({
+            'status': 'success',
+            'message': f'Запись на кружок "{club.name}" отменена'
+        }, status=status.HTTP_200_OK)
+

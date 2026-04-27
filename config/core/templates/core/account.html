@@ -9,6 +9,67 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <style>
+        /* Дополнительные стили для кнопки отмены */
+        .club-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f9f5f0;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+        .club-item:hover {
+            background: #f3ede5;
+            transform: translateX(5px);
+        }
+        .club-info {
+            flex: 1;
+        }
+        .club-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #E3950B;
+            display: block;
+        }
+        .club-age {
+            font-size: 14px;
+            color: #666;
+            display: block;
+            margin-top: 5px;
+        }
+        .btn-cancel {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-cancel:hover {
+            background-color: #c82333;
+            transform: scale(1.02);
+        }
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 16px;
+        }
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            color: #dc3545;
+            background: #ffe6e6;
+            border-radius: 12px;
+        }
+    </style>
 </head>
 <body>
 
@@ -34,7 +95,7 @@
     <div class="main-content">
         <div class="account-container">
             <div class="account-header">
-                <h2> Личный кабинет</h2>
+                <h2>📋 Личный кабинет</h2>
             </div>
 
             <div class="account-info" id="userInfo">
@@ -61,17 +122,17 @@
             </div>
 
             <div class="my-clubs">
-                <h3> Мои кружки</h3>
+                <h3>🎯 Мои кружки</h3>
                 <div id="myClubsList">
                     <div class="empty-message">Загрузка...</div>
                 </div>
             </div>
 
             <div class="btn-container">
-                <a href="{% url 'schedule' %}" class="schedule-link"> Моё расписание</a>
+                <a href="{% url 'schedule' %}" class="schedule-link">📅 Моё расписание</a>
             </div>
 
-            <button class="logout-btn" onclick="logout()">Выйти</button>
+            <button class="logout-btn" onclick="logout()">🚪 Выйти</button>
         </div>
     </div>
 
@@ -135,15 +196,46 @@
         function loadStudentClubs(clubs) {
             const container = document.getElementById('myClubsList');
             if (!clubs || clubs.length === 0) {
-                container.innerHTML = '<div class="empty-message">Вы ещё не записаны ни на один кружок</div>';
+                container.innerHTML = '<div class="empty-message">✨ Вы ещё не записаны ни на один кружок</div>';
                 return;
             }
             container.innerHTML = clubs.map(club => `
-                <div class="club-item">
-                    <span class="club-name">🎨 ${club.name}</span>
-                    <span class="club-age">${club.min_age}–${club.max_age} лет</span>
+                <div class="club-item" data-club-id="${club.id}" data-club-name="${club.name}">
+                    <div class="club-info">
+                        <span class="club-name">🎨 ${club.name}</span>
+                        <span class="club-age">📅 Возраст: ${club.min_age}–${club.max_age} лет</span>
+                    </div>
+                    <button class="btn-cancel" onclick="cancelEnrollment(${club.id}, '${club.name}')">Отменить записть</button>
                 </div>
             `).join('');
+        }
+
+        function cancelEnrollment(clubId, clubName) {
+            if (confirm(`❓ Вы уверены, что хотите отменить запись на кружок «${clubName}»?`)) {
+                const csrftoken = getCookie('csrftoken');
+
+                fetch(`/api/students/${studentId}/cancel_enroll/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({ club_id: clubId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(`✅ ${data.message}`);
+                        loadStudentData(); // Обновляем список кружков
+                    } else {
+                        alert(`❌ Ошибка: ${data.error || 'Не удалось отменить запись'}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    alert('Произошла ошибка при отмене записи');
+                });
+            }
         }
 
         function logout() {

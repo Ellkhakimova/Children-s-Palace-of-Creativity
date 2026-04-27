@@ -11,10 +11,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
     
     <!-- Подключаем общий CSS -->
-    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}?v=2">
 </head>
 <body>
-    
+
     <!-- Верхняя панель: название слева, вход/аккаунт справа -->
     <div class="top-bar">
         <div class="top-bar-container">
@@ -31,66 +31,18 @@
         </div>
     </div>
 
-    <!-- Кнопка "На главную" отдельным блоком (смещена ниже) -->
+    <!-- Кнопка "На главную" -->
     <div class="back-home-container">
         <a href="{% url 'index' %}" class="back-home-btn">← На главную</a>
     </div>
 
     <div class="main-content">
-        <h1 class="page-title">Выбери свой кружок</h1>
 
-        <div class="activities-grid">
-            <div class="activity-card" onclick="showActivityInfo('art')">
-                <img src="{% static 'core/images/art.png' %}" alt="Рисование" class="activity-icon">
-                <h3>Изостудия</h3>
-                <div class="activity-age">4–12 лет</div>
-                <div class="activity-description">Рисование, живопись, лепка, акварель. Развиваем творческое мышление и мелкую моторику.</div>
-                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
-            </div>
-
-            <div class="activity-card" onclick="showActivityInfo('music')">
-                <img src="{% static 'core/images/guitar.png' %}" alt="Гитара" class="activity-icon">
-                <h3>Игра на гитаре</h3>
-                <div class="activity-age">8–18 лет</div>
-                <div class="activity-description">Обучение игре на гитаре. Индивидуальный подход, изучение аккордов, техники игры, чтение нот. Репертуар подбирается с учётом интересов ученика.</div>
-                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
-            </div>
-
-            <div class="activity-card" onclick="showActivityInfo('robotics')">
-                <img src="{% static 'core/images/coala.png' %}" alt="Робототехника" class="activity-icon">
-                <h3>Робототехника</h3>
-                <div class="activity-age">11–18 лет</div>
-                <div class="activity-description">Конструирование, программирование, создание роботов. Развиваем инженерное мышление.</div>
-                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
-            </div>
-
-            <div class="activity-card" onclick="showActivityInfo('python')">
-                <img src="{% static 'core/images/python.png' %}" alt="Python" class="activity-icon">
-                <h3>Python для начинающих</h3>
-                <div class="activity-age">12–18 лет</div>
-                <div class="activity-description">Обучение языка программирования Python с нуля! Вы научитесь основам языка, изучите различные библиотеки и научитесь взаимодействовать с ними.</div>
-                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
-            </div>
-
-            <div class="activity-card" onclick="showActivityInfo('theater')">
-                <img src="{% static 'core/images/theater.png' %}" alt="Театр" class="activity-icon">
-                <h3>Театральная студия</h3>
-                <div class="activity-age">8–16 лет</div>
-                <div class="activity-description">Актерское мастерство, сценическая речь, пластика, постановка спектаклей. Развиваем уверенность, эмоциональный интеллект и навыки публичных выступлений.</div>
-                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
-            </div>
-
-            <div class="activity-card" onclick="showActivityInfo('chess')">
-                <img src="{% static 'core/images/chessboard.png' %}" alt="Шахматы" class="activity-icon">
-                <h3>Шахматы</h3>
-                <div class="activity-age">7–18 лет</div>
-                <div class="activity-description">Развитие логического мышления, стратегического планирования и концентрации.</div>
-                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
-            </div>
+        <div class="activities-grid" id="activitiesGrid">
         </div>
     </div>
 
-    <!-- ПОДВАЛ (footer) как на лендинге -->
+    <!-- ПОДВАЛ (footer) -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
@@ -119,7 +71,7 @@
     <div id="authModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
-            
+
             <div id="loginForm" class="form-container">
                 <h2>Вход</h2>
                 <form onsubmit="handleLogin(event)">
@@ -137,7 +89,7 @@
                     Нет аккаунта? <a onclick="showRegister()">Зарегистрироваться</a>
                 </div>
             </div>
-            
+
             <div id="registerForm" class="form-container hidden-form">
                 <h2>Регистрация</h2>
                 <form onsubmit="handleRegister(event)">
@@ -183,13 +135,11 @@
     <div id="infoModal" class="info-modal">
         <div class="info-modal-content">
             <span class="close-modal" onclick="closeInfoModal()">&times;</span>
-            <div id="infoContent">
-                <!-- Содержимое заполняется динамически через JS -->
-            </div>
+            <div id="infoContent"></div>
         </div>
     </div>
 
     <!-- Подключаем общий JavaScript -->
-    <script src="{% static 'core/js/script.js' %}"></script>
+    <script src="{% static 'core/js/script.js' %}?v=2"></script>
 </body>
 </html>
