@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет | Детский дворец творчества</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="logo-area">
+                <h1>Детский дворец творчества</h1>
+            </div>
+            <div class="auth-area">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account' %}" class="btn-auth">Аккаунт</a>
+                {% else %}
+                    <a href="#" onclick="openModal(); return false;" class="btn-auth">Вход</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="back-home-container">
+        <a href="{% url 'index' %}" class="back-home-btn">← На главную</a>
+    </div>
+
+    <div class="main-content">
+        <div class="account-container">
+            <div class="account-header">
+                <h2> Личный кабинет</h2>
+            </div>
+
+            <div class="account-info" id="userInfo">
+                <div class="info-row">
+                    <div class="info-label">ФИО:</div>
+                    <div class="info-value" id="fullName">—</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Имя пользователя:</div>
+                    <div class="info-value" id="username">—</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Дата рождения:</div>
+                    <div class="info-value" id="birthDate">—</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Родитель:</div>
+                    <div class="info-value" id="parentName">—</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Телефон родителя:</div>
+                    <div class="info-value" id="parentPhone">—</div>
+                </div>
+            </div>
+
+            <div class="my-clubs">
+                <h3> Мои кружки</h3>
+                <div id="myClubsList">
+                    <div class="empty-message">Загрузка...</div>
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <a href="{% url 'schedule' %}" class="schedule-link"> Моё расписание</a>
+            </div>
+
+            <button class="logout-btn" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>📞 Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                <p>✉️ Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
+                <p>🏠 Адрес: г. Название, ул. Примерная, д. 1</p>
+            </div>
+            <div class="footer-section">
+                <h3>Режим работы</h3>
+                <p>🕐 Пн-Пт: 09:00 - 20:00</p>
+                <p>🕐 Сб: 10:00 - 16:00</p>
+                <p>🕐 Вс: выходной</p>
+            </div>
+            <div class="footer-section">
+                <h3>О нас</h3>
+                <p>Дворец детского творчества — место, где каждый ребенок может раскрыть свой талант. Мы предлагаем более 30 кружков и секций для детей от 4 до 18 лет.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Детский дворец творчества. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'core/js/script.js' %}"></script>
+    <script>
+        const studentId = localStorage.getItem('studentId');
+        const username = localStorage.getItem('username');
+
+        if (!studentId || studentId === 'null') {
+            window.location.href = '/';
+        }
+
+        function loadStudentData() {
+            if (!studentId || studentId === 'null') {
+                document.getElementById('myClubsList').innerHTML = '<div class="error-message">Ошибка: вы не авторизованы.</div>';
+                return;
+            }
+            fetch(`/api/students/${studentId}/`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Студент не найден');
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('fullName').textContent = data.full_name || '—';
+                    document.getElementById('username').textContent = data.user?.username || username || '—';
+                    document.getElementById('birthDate').textContent = data.birth_date || '—';
+                    document.getElementById('parentName').textContent = data.parent_name || '—';
+                    document.getElementById('parentPhone').textContent = data.parent_phone || '—';
+                    loadStudentClubs(data.clubs || []);
+                })
+                .catch(error => {
+                    console.error(error);
+                    document.getElementById('myClubsList').innerHTML = '<div class="error-message">Ошибка загрузки данных</div>';
+                });
+        }
+
+        function loadStudentClubs(clubs) {
+            const container = document.getElementById('myClubsList');
+            if (!clubs || clubs.length === 0) {
+                container.innerHTML = '<div class="empty-message">Вы ещё не записаны ни на один кружок</div>';
+                return;
+            }
+            container.innerHTML = clubs.map(club => `
+                <div class="club-item">
+                    <span class="club-name">🎨 ${club.name}</span>
+                    <span class="club-age">${club.min_age}–${club.max_age} лет</span>
+                </div>
+            `).join('');
+        }
+
+        function logout() {
+            fetch('/api/logout/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') }
+            })
+            .then(() => {
+                localStorage.removeItem('studentId');
+                localStorage.removeItem('userId');
+                localStorage.removeItem('username');
+                window.location.href = '/';
+            })
+            .catch(error => console.error('Ошибка выхода:', error));
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        loadStudentData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор занятий | Дворец творчества</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Подключаем общий CSS -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+</head>
+<body>
+    
+    <!-- Верхняя панель: название слева, вход/аккаунт справа -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="logo-area">
+                <h1>Детский дворец творчества</h1>
+            </div>
+            <div class="auth-area">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account' %}" class="btn-auth">Аккаунт</a>
+                {% else %}
+                    <a href="#" onclick="openModal(); return false;" class="btn-auth">Вход</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопка "На главную" отдельным блоком (смещена ниже) -->
+    <div class="back-home-container">
+        <a href="{% url 'index' %}" class="back-home-btn">← На главную</a>
+    </div>
+
+    <div class="main-content">
+        <h1 class="page-title">Выбери свой кружок</h1>
+
+        <div class="activities-grid">
+            <div class="activity-card" onclick="showActivityInfo('art')">
+                <img src="{% static 'core/images/art.png' %}" alt="Рисование" class="activity-icon">
+                <h3>Изостудия</h3>
+                <div class="activity-age">4–12 лет</div>
+                <div class="activity-description">Рисование, живопись, лепка, акварель. Развиваем творческое мышление и мелкую моторику.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+
+            <div class="activity-card" onclick="showActivityInfo('music')">
+                <img src="{% static 'core/images/guitar.png' %}" alt="Гитара" class="activity-icon">
+                <h3>Игра на гитаре</h3>
+                <div class="activity-age">8–18 лет</div>
+                <div class="activity-description">Обучение игре на гитаре. Индивидуальный подход, изучение аккордов, техники игры, чтение нот. Репертуар подбирается с учётом интересов ученика.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+
+            <div class="activity-card" onclick="showActivityInfo('robotics')">
+                <img src="{% static 'core/images/coala.png' %}" alt="Робототехника" class="activity-icon">
+                <h3>Робототехника</h3>
+                <div class="activity-age">11–18 лет</div>
+                <div class="activity-description">Конструирование, программирование, создание роботов. Развиваем инженерное мышление.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+
+            <div class="activity-card" onclick="showActivityInfo('python')">
+                <img src="{% static 'core/images/python.png' %}" alt="Python" class="activity-icon">
+                <h3>Python для начинающих</h3>
+                <div class="activity-age">12–18 лет</div>
+                <div class="activity-description">Обучение языка программирования Python с нуля! Вы научитесь основам языка, изучите различные библиотеки и научитесь взаимодействовать с ними.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+
+            <div class="activity-card" onclick="showActivityInfo('theater')">
+                <img src="{% static 'core/images/theater.png' %}" alt="Театр" class="activity-icon">
+                <h3>Театральная студия</h3>
+                <div class="activity-age">8–16 лет</div>
+                <div class="activity-description">Актерское мастерство, сценическая речь, пластика, постановка спектаклей. Развиваем уверенность, эмоциональный интеллект и навыки публичных выступлений.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+
+            <div class="activity-card" onclick="showActivityInfo('chess')">
+                <img src="{% static 'core/images/chessboard.png' %}" alt="Шахматы" class="activity-icon">
+                <h3>Шахматы</h3>
+                <div class="activity-age">7–18 лет</div>
+                <div class="activity-description">Развитие логического мышления, стратегического планирования и концентрации.</div>
+                <button class="btn-signup" onclick="event.stopPropagation(); openModal()">Записаться ✒️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ПОДВАЛ (footer) как на лендинге -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>📞 Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                <p>✉️ Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
+                <p>🏠 Адрес: г. Название, ул. Примерная, д. 1</p>
+            </div>
+            <div class="footer-section">
+                <h3>Режим работы</h3>
+                <p>🕐 Пн-Пт: 09:00 - 20:00</p>
+                <p>🕐 Сб: 10:00 - 16:00</p>
+                <p>🕐 Вс: выходной</p>
+            </div>
+            <div class="footer-section">
+                <h3>О нас</h3>
+                <p>Дворец детского творчества — место, где каждый ребенок может раскрыть свой талант. Мы предлагаем более 30 кружков и секций для детей от 4 до 18 лет.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Детский дворец творчества. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- Модальное окно для авторизации -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            
+            <div id="loginForm" class="form-container">
+                <h2>Вход</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input type="text" id="loginUsername" required placeholder="Введите имя пользователя">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-submit">Войти</button>
+                </form>
+                <div class="form-switch">
+                    Нет аккаунта? <a onclick="showRegister()">Зарегистрироваться</a>
+                </div>
+            </div>
+            
+            <div id="registerForm" class="form-container hidden-form">
+                <h2>Регистрация</h2>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input type="text" id="regUsername" required placeholder="Придумайте имя пользователя">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="regPassword" required placeholder="••••••••" oninput="checkPasswordStrength()">
+                        <small id="passwordHint" style="display: block; margin-top: 5px; font-size: 12px; color: #666;">Пароль должен быть не менее 8 символов</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Почта</label>
+                        <input type="email" id="regEmail" required placeholder="example@mail.ru">
+                    </div>
+                    <div class="form-group">
+                        <label>ФИО</label>
+                        <input type="text" id="regFullName" required placeholder="Иванов Иван Иванович">
+                    </div>
+                    <div class="form-group">
+                        <label>Дата рождения</label>
+                        <input type="date" id="regBirthDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ФИО родителя</label>
+                        <input type="text" id="regParentName" required placeholder="Иванова Ольга Петровна">
+                    </div>
+                    <div class="form-group">
+                        <label>Номер телефона родителя</label>
+                        <input type="tel" id="regPhone" required placeholder="+7 (XXX) XXX-XX-XX">
+                    </div>
+                    <button type="submit" class="btn-submit">Зарегистрироваться</button>
+                </form>
+                <div class="form-switch">
+                    Уже есть аккаунт? <a onclick="showLogin()">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для информации о кружке -->
+    <div id="infoModal" class="info-modal">
+        <div class="info-modal-content">
+            <span class="close-modal" onclick="closeInfoModal()">&times;</span>
+            <div id="infoContent">
+                <!-- Содержимое заполняется динамически через JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем общий JavaScript -->
+    <script src="{% static 'core/js/script.js' %}"></script>
+</body>
+</html>

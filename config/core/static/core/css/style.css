@@ -1,0 +1,1285 @@
+@font-face {
+    font-family: 'CartonSixRUS-Regular';
+    src: url('../fonts/CartonSixRUS-Regular.ttf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Calibri';
+    src: url('../fonts/calibri.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Calibri';
+    src: url('../fonts/calibri_bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #FEF7ED;
+    font-family: 'Calibri', 'Cormorant Garamond', sans-serif;
+}
+
+
+
+/* ========== ВЕРХНЯЯ ПАНЕЛЬ (название слева, вход справа) ========== */
+.top-bar {
+    background-color: #DDB571;
+    width: 100%;
+    padding: 12px 40px;
+    position: relative;
+}
+
+.top-bar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo-area {
+    flex: 1;
+    text-align: left;
+}
+
+.logo-area h1 {
+    font-family: 'CartonSixRUS-Regular', cursive;
+    font-size: 42px;
+    font-weight: 400;
+    color: #2C2C2C;
+    letter-spacing: 2px;
+    margin: 0;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.auth-area {
+    flex-shrink: 0;
+}
+
+.btn-auth {
+    display: inline-block;
+    font-family: 'Calibri', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #2C2C2C;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+}
+
+.btn-auth:hover {
+    color: #B8865A;
+    border-bottom-color: #B8865A;
+    transform: translateY(-1px);
+}
+
+/* Убираем старые медиа-запросы для top-bar, если они есть */
+@media (max-width: 900px) {
+    .logo-area h1 {
+        font-size: 28px;
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .top-bar {
+        padding: 12px 20px;
+    }
+}
+
+
+.nav-bar {
+    background-color: #F5E6D3;
+    width: 100%;
+    padding: 16px 0;
+    text-align: center;
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0 20px;
+}
+
+.nav-buttons a {
+    font-family: 'Calibri', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    padding: 8px 24px;
+    background-color: #DDB571;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+    color: #2C2C2C;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.nav-buttons a:hover {
+    background-color: #C49A6C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.center-logo {
+    margin: 20px 0 15px 0;
+}
+
+.center-logo img {
+    width: 420px;
+    height: auto;
+    max-width: 85%;
+}
+
+.btn-circle {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background-color: #DDB571;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 8px 32px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 15px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-circle:hover {
+    background-color: #C49A6C;
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-circle img {
+    width: 42px;
+    height: 42px;
+    transition: transform 0.3s ease;
+}
+
+.btn-circle:hover img {
+    transform: translateX(5px);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 30px;
+    width: 90%;
+    max-width: 450px;
+    max-height: 95vh;
+    padding: 35px 30px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #DDB571;
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #C49A6C;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #999;
+    transition: 0.3s;
+}
+
+.close-modal:hover {
+    color: #DDB571;
+}
+
+.modal h2 {
+    font-family: 'Calibri', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #DDB571;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-family: 'Calibri', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 14px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 15px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
+    transition: 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #DDB571;
+    box-shadow: 0 0 5px rgba(212, 163, 115, 0.3);
+}
+
+.btn-submit {
+    width: 100%;
+    background-color: #DDB571;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 40px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.btn-submit:hover {
+    background-color: #C49A6C;
+    transform: scale(1.02);
+}
+
+.form-switch {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 13px;
+    color: #666;
+}
+
+.form-switch a {
+    color: #DDB571;
+    text-decoration: none;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.form-switch a:hover {
+    text-decoration: underline;
+}
+
+.hidden-form {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .nav-buttons {
+        gap: 60px;
+    }
+    .nav-buttons a {
+        font-size: 18px;
+        padding: 6px 20px;
+    }
+    .center-logo img {
+        width: 350px;
+    }
+    .btn-circle {
+        font-size: 18px;
+        padding: 10px 28px;
+    }
+    .btn-circle img {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar h1 {
+        font-size: 24px;
+        letter-spacing: 1px;
+        word-spacing: 4px;
+    }
+    .nav-buttons {
+        gap: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+    .nav-buttons a {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 8px 28px;
+        width: 200px;
+    }
+    .btn-circle {
+        font-size: 16px;
+        padding: 10px 20px;
+        gap: 10px;
+    }
+    .btn-circle img {
+        width: 28px;
+        height: 28px;
+    }
+    .center-logo img {
+        width: 280px;
+    }
+    .modal-content {
+        padding: 25px 20px;
+    }
+}
+
+/* Стили для страницы activities.html */
+
+.back-home {
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.back-home a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #DDB571;
+    padding: 5px 16px;
+    border-radius: 40px;
+    transition: 0.3s;
+}
+
+.back-home a:hover {
+    background-color: #C49A6C;
+    transform: translateX(-3px);
+}
+
+.main-content {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.page-title {
+    text-align: center;
+    font-family: 'Calibri', sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+    color: #2C2C2C;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+}
+
+.activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 35px;
+    margin-bottom: 50px;
+}
+
+.activity-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.activity-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.activity-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    pointer-events: none;
+}
+
+.activity-card h3 {
+    font-family: 'Calibri', sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    color: #DDB571;
+    margin-bottom: 10px;
+    pointer-events: none;
+}
+
+.activity-age {
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.activity-description {
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    pointer-events: none;
+}
+
+.btn-signup {
+    display: inline-block;
+    background-color: #DDB571;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 22px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.btn-signup:hover {
+    background-color: #C49A6C;
+    transform: scale(1.05);
+}
+
+.info-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-modal.active {
+    display: flex;
+}
+
+.info-modal-content {
+    background-color: #fff;
+    border-radius: 30px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 95vh;
+    padding: 35px 30px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.info-modal-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.info-modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.info-modal-content::-webkit-scrollbar-thumb {
+    background: #DDB571;
+    border-radius: 10px;
+}
+
+.info-modal-content::-webkit-scrollbar-thumb:hover {
+    background: #C49A6C;
+}
+
+.info-section {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.info-section h3 {
+    font-family: 'Calibri', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #DDB571;
+    margin-bottom: 10px;
+}
+
+.info-section p {
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+}
+
+.schedule-list {
+    list-style: none;
+    padding: 0;
+}
+
+.schedule-list li {
+    padding: 5px 0;
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+@media (max-width: 1024px) {
+    .nav-buttons {
+        gap: 60px;
+    }
+    .nav-buttons a {
+        font-size: 18px;
+        padding: 6px 20px;
+    }
+    .page-title {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar h1 {
+        font-size: 24px;
+        letter-spacing: 1px;
+        word-spacing: 4px;
+        white-space: nowrap;
+    }
+    .nav-buttons {
+        gap: 15px;
+        flex-direction: column;
+        align-items: center;
+    }
+    .nav-buttons a {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 8px 28px;
+        width: 200px;
+    }
+    .back-home {
+        position: static;
+        text-align: center;
+        margin-top: 10px;
+    }
+    .back-home a {
+        display: inline-flex;
+        justify-content: center;
+    }
+    .page-title {
+        font-size: 24px;
+        margin-top: 20px;
+    }
+    .activities-grid {
+        grid-template-columns: 1fr;
+    }
+    .modal-content, .info-modal-content {
+        padding: 25px 20px;
+    }
+}
+
+/* ========== ОСНОВНОЙ ГЕРОЙ-БЛОК (фото + текст) ========== */
+.hero-section {
+    width: 100%;
+    min-height: calc(100vh - 150px); /* Высота от шапки до подвала */
+    display: flex;
+    align-items: center;
+    background-color: #FEF7ED;
+}
+
+.hero-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    width: 100%;
+}
+
+.hero-image {
+    flex: 1;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.hero-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.hero-image img:hover {
+    transform: scale(1.02);
+}
+
+.hero-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.hero-content h2 {
+    font-family: 'CartonSixRUS-Regular', cursive;
+    font-size: 48px;
+    color: #2C2C2C;
+    margin-bottom: 25px;
+    line-height: 1.2;
+}
+
+.hero-content .highlight {
+    color: #DDB571;
+    display: inline-block;
+}
+
+.hero-description {
+    font-family: 'Calibri', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #444;
+    margin-bottom: 30px;
+}
+
+.stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-number {
+    font-family: 'CartonSixRUS-Regular', cursive;
+    font-size: 36px;
+    font-weight: bold;
+    color: #DDB571;
+}
+
+.stat-label {
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #DDB571;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 14px 32px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #C49A6C;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary img {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.btn-primary:hover img {
+    transform: translateX(5px);
+}
+
+/* ========== ПОДВАЛ (FOOTER) ========== */
+.footer {
+    background-color: #2C2C2C;
+    color: #F5E6D3;
+    margin-top: 0;
+    font-family: 'Calibri', sans-serif;
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 40px 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-section h3 {
+    font-family: 'Calibri', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #DDB571;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+
+.footer-section p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #E0E0E0;
+    margin-bottom: 8px;
+}
+
+.footer-section a {
+    color: #DDB571;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #C49A6C;
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    background-color: #1A1A1A;
+    text-align: center;
+    padding: 15px 20px;
+    font-size: 12px;
+    color: #999;
+    border-top: 1px solid #3A3A3A;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+/* ========== КНОПКА "НА ГЛАВНУЮ" (для страницы activities) ========== */
+.back-home-container {
+    max-width: 1400px;
+    margin: 20px auto 0;
+    padding: 0 40px;
+}
+
+.back-home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: #2C2C2C;
+    text-decoration: none;
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.back-home-btn:hover {
+    color: #B8865A;
+    border-bottom-color: #B8865A;
+    transform: translateX(-3px);
+}
+
+/* ========== ОСНОВНОЙ КОНТЕНТ (activities) ========== */
+.main-content {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 40px;
+}
+
+.page-title {
+    text-align: center;
+    font-family: 'CartonSixRUS-Regular', cursive;
+    font-size: 48px;
+    color: #2C2C2C;
+    margin-bottom: 50px;
+    letter-spacing: 2px;
+}
+
+/* Сетка карточек */
+.activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 35px;
+    margin-bottom: 50px;
+}
+
+.activity-card {
+    background-color: #F5E6D3;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.activity-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.activity-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    pointer-events: none;
+}
+
+.activity-card h3 {
+    font-family: 'Calibri', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #DDB571;
+    margin-bottom: 10px;
+    pointer-events: none;
+}
+
+.activity-age {
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 500;
+    pointer-events: none;
+}
+
+.activity-description {
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    pointer-events: none;
+}
+
+.btn-signup {
+    display: inline-block;
+    background-color: #DDB571;
+    color: #2C2C2C;
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.btn-signup:hover {
+    background-color: #C49A6C;
+    transform: scale(1.05);
+}
+
+
+/* ========== ЛИЧНЫЙ КАБИНЕТ (account.html) ========== */
+/* ========== ЛИЧНЫЙ КАБИНЕТ (account.html) ========== */
+.account-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.account-header {
+    text-align: center;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 25px;
+    margin-bottom: 30px;
+}
+
+.account-header h2 {
+    font-family: 'CartonSixRUS-Regular', cursive;
+    color: #2c3e50;
+    font-size: 36px;
+}
+
+.account-info {
+    margin-bottom: 30px;
+}
+
+.info-row {
+    display: flex;
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.info-label {
+    width: 180px;
+    font-weight: 700;
+    color: #DDB571;
+    font-size: 18px;  /* 👈 УВЕЛИЧЕН */
+}
+
+.info-value {
+    flex: 1;
+    color: #1a1a1a;  /* 👈 ТЕМНЕЕ (было #333) */
+    font-size: 18px;  /* 👈 УВЕЛИЧЕН */
+    font-weight: 500; /* 👈 ПОЛУЖИРНЫЙ */
+}
+
+.my-clubs {
+    margin-top: 40px;
+}
+
+.my-clubs h3 {
+    font-family: 'CartonSixRUS-Regular', cursive;
+    color: #2c3e50;
+    font-size: 28px;
+    margin-bottom: 25px;
+}
+
+.club-item {
+    background: #F5E6D3;
+    padding: 18px;
+    margin-bottom: 12px;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.club-item:hover {
+    transform: translateX(5px);
+    background: #efe0d0;
+}
+
+.club-name {
+    font-weight: 700;
+    color: #1a1a1a;
+    font-size: 18px;
+}
+
+.club-age {
+    color: #444;
+    font-size: 16px;
+    font-weight: 500;
+}
+.schedule-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #DDB571;
+    color: #2C2C2C;
+    padding: 14px 32px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.schedule-link:hover {
+    background: #C49A6C;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.logout-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    transition: all 0.3s ease;
+    margin-top: 30px;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+/* ========== РАСПИСАНИЕ (schedule.html) ========== */
+.schedule-container {
+    max-width: 1300px;
+    margin: 50px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.schedule-header {
+    text-align: center;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 25px;
+    margin-bottom: 30px;
+}
+
+.schedule-header h2 {
+    font-family: 'CartonSixRUS-Regular', cursive;
+    color: #2c3e50;
+    font-size: 36px;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.schedule-table th,
+.schedule-table td {
+    border: 1px solid #e0e0e0;
+    padding: 14px 8px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.schedule-table th {
+    background: #2c3e50;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.schedule-lesson {
+    background: #F5E6D3;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    text-align: left;
+}
+
+.schedule-lesson:last-child {
+    margin-bottom: 0;
+}
+
+.lesson-name {
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+    font-size: 16px;
+}
+
+.lesson-room,
+.lesson-teacher,
+.lesson-time {
+    font-size: 13px;
+    color: #333;
+    margin-top: 4px;
+}
+
+.time-column {
+    font-weight: 700;
+    background: #f5f5f5;
+    width: 90px;
+    color: #1a1a1a;
+    font-size: 15px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.back-link:hover {
+    color: #DDB571;
+}
+
+/* ========== ОБЩИЕ СТИЛИ ДЛЯ СТРАНИЦ ========== */
+/* ========== ОБЩИЕ СТИЛИ ДЛЯ СТРАНИЦ ========== */
+.empty-message,
+.empty-schedule {
+    text-align: center;
+    padding: 40px;
+    background: #f9f9f9;
+    border-radius: 16px;
+    color: #666;
+    font-size: 16px;
+}
+
+.error-message {
+    text-align: center;
+    padding: 40px;
+    background: #f9f9f9;
+    border-radius: 16px;
+    color: #e74c3c;
+    font-size: 16px;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+}
+
+.btn-container {
+    text-align: center;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
+    color: #2c3e50;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.back-link:hover {
+    color: #DDB571;
+}
+/* ========== АДАПТИВ ДЛЯ ЛИЧНОГО КАБИНЕТА И РАСПИСАНИЯ ========== */
+@media (max-width: 768px) {
+    .account-container,
+    .schedule-container {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .info-row {
+        flex-direction: column;
+    }
+
+    .info-label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .club-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+        padding: 8px 4px;
+        font-size: 12px;
+    }
+
+    .schedule-lesson {
+        padding: 6px;
+    }
+
+    .account-header h2,
+    .schedule-header h2 {
+        font-size: 28px;
+    }
+
+    .my-clubs h3 {
+        font-size: 24px;
+    }
+}

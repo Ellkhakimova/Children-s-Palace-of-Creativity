@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моё расписание | Детский дворец творчества</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+</head>
+<body>
+
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="logo-area">
+                <h1>Детский дворец творчества</h1>
+            </div>
+            <div class="auth-area">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account' %}" class="btn-auth">Аккаунт</a>
+                {% else %}
+                    <a href="#" onclick="openModal(); return false;" class="btn-auth">Вход</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="back-home-container">
+        <a href="{% url 'index' %}" class="back-home-btn">← На главную</a>
+    </div>
+
+    <div class="main-content">
+        <div class="schedule-container">
+            <div class="schedule-header">
+                <h2>Расписание на неделю</h2>
+            </div>
+            <div id="scheduleContainer">
+                <div class="loading">Загрузка расписания...</div>
+            </div>
+            <div style="text-align: center;">
+                <a href="{% url 'account' %}" class="back-link">← Вернуться в личный кабинет</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>📞 Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                <p>✉️ Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
+                <p>🏠 Адрес: г. Название, ул. Примерная, д. 1</p>
+            </div>
+            <div class="footer-section">
+                <h3>Режим работы</h3>
+                <p>🕐 Пн-Пт: 09:00 - 20:00</p>
+                <p>🕐 Сб: 10:00 - 16:00</p>
+                <p>🕐 Вс: выходной</p>
+            </div>
+            <div class="footer-section">
+                <h3>О нас</h3>
+                <p>Дворец детского творчества — место, где каждый ребенок может раскрыть свой талант. Мы предлагаем более 30 кружков и секций для детей от 4 до 18 лет.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Детский дворец творчества. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        const studentId = localStorage.getItem('studentId');
+
+        if (!studentId || studentId === 'null') {
+            document.getElementById('scheduleContainer').innerHTML = '<div class="error-message">Вы не авторизованы. <a href="/">Вернуться на главную</a></div>';
+        } else {
+            loadSchedule();
+        }
+
+        function loadSchedule() {
+            const container = document.getElementById('scheduleContainer');
+            fetch(`/api/students/${studentId}/schedule/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data || data.length === 0) {
+                        container.innerHTML = '<div class="empty-schedule">У вас пока нет занятий. Запишитесь на кружки!</div>';
+                        return;
+                    }
+                    buildScheduleTable(data, container);
+                })
+                .catch(error => {
+                    console.error(error);
+                    container.innerHTML = '<div class="error-message">Ошибка загрузки расписания</div>';
+                });
+        }
+
+        function buildScheduleTable(scheduleItems, container) {
+            const days = [
+                { code: 'Mon', name: 'Понедельник' },
+                { code: 'Tue', name: 'Вторник' },
+                { code: 'Wed', name: 'Среда' },
+                { code: 'Thu', name: 'Четверг' },
+                { code: 'Fri', name: 'Пятница' },
+                { code: 'Sat', name: 'Суббота' },
+                { code: 'Sun', name: 'Воскресенье' }
+            ];
+            const scheduleByDay = {};
+            days.forEach(day => { scheduleByDay[day.code] = []; });
+            scheduleItems.forEach(item => {
+                if (scheduleByDay[item.day_of_week]) {
+                    scheduleByDay[item.day_of_week].push(item);
+                }
+            });
+            for (let day in scheduleByDay) {
+                scheduleByDay[day].sort((a, b) => a.start_time.localeCompare(b.start_time));
+            }
+            const allTimes = [...new Set(scheduleItems.map(item => item.start_time))].sort();
+
+            let html = '<div style="overflow-x: auto;"><table class="schedule-table"><thead><tr><th>Время</th>';
+            days.forEach(day => { html += `<th>${day.name}</th>`; });
+            html += '</tr></thead><tbody>';
+            if (allTimes.length === 0) {
+                html += `<tr><td colspan="8" class="empty-schedule">Нет занятий</td></tr>`;
+            } else {
+                allTimes.forEach(time => {
+                    html += `<tr><td class="time-column">${time}</td>`;
+                    days.forEach(day => {
+                        const lessons = scheduleByDay[day.code].filter(l => l.start_time === time);
+                        if (lessons.length > 0) {
+                            html += `<td>`;
+                            lessons.forEach(lesson => {
+                                html += `
+                                    <div class="schedule-lesson">
+                                        <div class="lesson-name">${lesson.club_name}</div>
+                                        <div class="lesson-room">📍 ${lesson.room}</div>
+                                        <div class="lesson-teacher"> ${lesson.teacher_name || 'Преподаватель'}</div>
+                                        <div class="lesson-time"> ${lesson.start_time}–${lesson.end_time}</div>
+                                    </div>
+                                `;
+                            });
+                            html += `</td>`;
+                        } else {
+                            html += `<td class="empty-schedule">—</td>`;
+                        }
+                    });
+                    html += `</tr>`;
+                });
+            }
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

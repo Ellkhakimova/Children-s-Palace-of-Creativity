@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ teacher.full_name }} | Дворец творчества</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <style>
+        .teacher-detail-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .teacher-profile {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .teacher-profile-header {
+            background: linear-gradient(135deg, #4a6fa5 0%, #3a5a8a 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .teacher-profile-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .teacher-profile-body {
+            padding: 40px;
+        }
+        .info-block {
+            margin-bottom: 30px;
+        }
+        .info-block h3 {
+            color: #4a6fa5;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        .club-list {
+            display: grid;
+            gap: 20px;
+        }
+        .club-card {
+            border-left: 4px solid #4a6fa5;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        .club-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .club-card p {
+            color: #666;
+            margin: 5px 0;
+        }
+        .back-btn {
+            display: inline-block;
+            background: #4a6fa5;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .back-btn:hover {
+            background: #3a5a8a;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <div class="logo-area">
+                <h1>Детский дворец творчества</h1>
+            </div>
+            <div class="auth-area">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account' %}" class="btn-auth">Аккаунт</a>
+                {% else %}
+                    <a href="#" onclick="openModal(); return false;" class="btn-auth">Вход</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="back-home-container">
+        <a href="{% url 'teachers_list' %}" class="back-home-btn">← Ко всем преподавателям</a>
+    </div>
+
+    <div class="teacher-detail-container">
+        <div class="teacher-profile">
+            <div class="teacher-profile-header">
+                <div style="font-size: 80px; margin-bottom: 10px;">👩‍🏫</div>
+                <h1>{{ teacher.full_name }}</h1>
+                <p>📞 {{ teacher.phone }}</p>
+            </div>
+            
+            <div class="teacher-profile-body">
+                <div class="info-block">
+                    <h3>📝 О преподавателе</h3>
+                    <p>{{ teacher.info|linebreaks }}</p>
+                </div>
+                
+                <div class="info-block">
+                    <h3>🎓 Ведёт кружки</h3>
+                    <div class="club-list">
+                        {% for club in clubs %}
+                        <div class="club-card">
+                            <h4>{{ club.name }}</h4>
+                            <p>{{ club.description }}</p>
+                            <p>👥 Возраст: {{ club.min_age }}-{{ club.max_age }} лет</p>
+                            <p>🎓 Мест: {{ club.current_seats }}/{{ club.total_seats }}</p>
+                        </div>
+                        {% empty %}
+                        <p style="color: #999;">Пока не ведёт кружки</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>📞 Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                <p>✉️ Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
+                <p>🏠 Адрес: г. Название, ул. Примерная, д. 1</p>
+            </div>
+            <div class="footer-section">
+                <h3>Режим работы</h3>
+                <p>🕐 Пн-Пт: 09:00 - 20:00</p>
+                <p>🕐 Сб: 10:00 - 16:00</p>
+                <p>🕐 Вс: выходной</p>
+            </div>
+            <div class="footer-section">
+                <h3>О нас</h3>
+                <p>Дворец детского творчества — место, где каждый ребенок может раскрыть свой талант. Мы предлагаем более 30 кружков и секций для детей от 4 до 18 лет.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Детский дворец творчества. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            
+            <div id="loginForm" class="form-container">
+                <h2>Вход</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input type="text" id="loginUsername" required placeholder="Введите имя пользователя">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn-submit">Войти</button>
+                </form>
+                <div class="form-switch">
+                    Нет аккаунта? <a onclick="showRegister()">Зарегистрироваться</a>
+                </div>
+            </div>
+            
+            <div id="registerForm" class="form-container hidden-form">
+                <h2>Регистрация</h2>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Имя пользователя</label>
+                        <input type="text" id="regUsername" required placeholder="Придумайте имя пользователя">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="regPassword" required placeholder="••••••••" oninput="checkPasswordStrength()">
+                        <small id="passwordHint" style="display: block; margin-top: 5px; font-size: 12px; color: #666;">Пароль должен быть не менее 8 символов</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Почта</label>
+                        <input type="email" id="regEmail" required placeholder="example@mail.ru">
+                    </div>
+                    <div class="form-group">
+                        <label>ФИО</label>
+                        <input type="text" id="regFullName" required placeholder="Иванов Иван Иванович">
+                    </div>
+                    <div class="form-group">
+                        <label>Дата рождения</label>
+                        <input type="date" id="regBirthDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>ФИО родителя</label>
+                        <input type="text" id="regParentName" required placeholder="Иванова Ольга Петровна">
+                    </div>
+                    <div class="form-group">
+                        <label>Номер телефона родителя</label>
+                        <input type="tel" id="regPhone" required placeholder="+7 (XXX) XXX-XX-XX">
+                    </div>
+                    <button type="submit" class="btn-submit">Зарегистрироваться</button>
+                </form>
+                <div class="form-switch">
+                    Уже есть аккаунт? <a onclick="showLogin()">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'core/js/script.js' %}"></script>
+</body>
+</html>
