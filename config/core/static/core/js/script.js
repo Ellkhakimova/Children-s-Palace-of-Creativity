@@ -239,7 +239,7 @@ function displayClubs(clubs) {
             <div class="activity-age">${club.min_age}–${club.max_age} лет</div>
             <div class="activity-description">${club.description.substring(0, 100)}${club.description.length > 100 ? '...' : ''}</div>
             <div class="activity-seats">Свободно мест: ${club.available_seats} из ${club.total_seats}</div>
-            <button class="btn-signup" onclick="event.stopPropagation(); openEnrollModal(${club.id}, '${club.name}')">Записаться ✒️</button>
+            <button class="btn-signup" onclick="event.stopPropagation(); openEnrollModal(${club.id}, '${club.name}')">Записаться ️</button>
         `;
         grid.appendChild(card);
     });
