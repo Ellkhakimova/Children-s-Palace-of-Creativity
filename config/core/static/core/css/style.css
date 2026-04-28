@@ -648,35 +648,31 @@ body {
 
 /* ========== ОСНОВНОЙ ГЕРОЙ-БЛОК (фото + текст) ========== */
 .hero-section {
-    width: 100%;
-    min-height: calc(100vh - 150px); /* Высота от шапки до подвала */
-    display: flex;
-    align-items: center;
-    background-color: #FEF7ED;
+    padding: 40px 20px;
+    min-height: auto;
 }
 
 .hero-container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 40px;
     display: flex;
     align-items: center;
-    gap: 60px;
-    width: 100%;
+    gap: 50px;
+    flex-wrap: wrap;
 }
 
 .hero-image {
     flex: 1;
-    border-radius: 30px;
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    min-width: 220px;
+    max-width: 350px;
 }
 
 .hero-image img {
     width: 100%;
     height: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     display: block;
-    transition: transform 0.3s ease;
 }
 
 .hero-image img:hover {
@@ -685,7 +681,7 @@ body {
 
 .hero-content {
     flex: 1;
-    padding: 20px;
+    min-width: 280px;
 }
 
 .hero-content h2 {
@@ -981,14 +977,14 @@ body {
     width: 180px;
     font-weight: 700;
     color: #DDB571;
-    font-size: 18px;  /* 👈 УВЕЛИЧЕН */
+    font-size: 18px;
 }
 
 .info-value {
     flex: 1;
-    color: #1a1a1a;  /* 👈 ТЕМНЕЕ (было #333) */
-    font-size: 18px;  /* 👈 УВЕЛИЧЕН */
-    font-weight: 500; /* 👈 ПОЛУЖИРНЫЙ */
+    color: #1a1a1a;
+    font-size: 18px;
+    font-weight: 500;
 }
 
 .my-clubs {
@@ -1165,7 +1161,6 @@ body {
     color: #DDB571;
 }
 
-/* ========== ОБЩИЕ СТИЛИ ДЛЯ СТРАНИЦ ========== */
 /* ========== ОБЩИЕ СТИЛИ ДЛЯ СТРАНИЦ ========== */
 .empty-message,
 .empty-schedule {

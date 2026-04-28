@@ -50,7 +50,7 @@ function checkPasswordStrength() {
         passwordHint.innerHTML = 'Пароль должен быть не менее 8 символов';
     } else if (password.length < 8) {
         passwordHint.style.color = '#ff6b6b';
-        passwordHint.innerHTML = '⚠️ Пароль слишком короткий! Нужно не менее 8 символов';
+        passwordHint.innerHTML = 'Пароль слишком короткий! Нужно не менее 8 символов';
     } else {
         passwordHint.style.color = '#4caf50';
         passwordHint.innerHTML = '✓ Пароль подходит';
@@ -184,10 +184,10 @@ function fetchStudentByUsername(username) {
                 localStorage.setItem('studentId', currentStudentId);
                 localStorage.setItem('userId', currentUserId);
                 localStorage.setItem('username', username);
-                console.log('✅ Student ID сохранен:', currentStudentId);
-                console.log('✅ Username сохранен:', username);
+                console.log('Student ID сохранен:', currentStudentId);
+                console.log('Username сохранен:', username);
             } else {
-                console.error('❌ Студент не найден для username:', username);
+                console.error('Студент не найден для username:', username);
                 console.log('Доступные username в API:', students.map(s => s.user?.username));
             }
         })
@@ -254,26 +254,26 @@ function showActivityInfoFromAPI(clubId) {
             infoContent.innerHTML = `
                 <h2>${club.name}</h2>
                 <div class="info-section">
-                    <h3>📚 О кружке</h3>
+                    <h3>О кружке</h3>
                     <p>${club.description}</p>
                 </div>
                 <div class="info-section">
-                    <h3>⌛ Возраст</h3>
+                    <h3>Возраст</h3>
                     <p>${club.min_age}–${club.max_age} лет</p>
                 </div>
                 <div class="info-section">
-                    <h3>👩‍🏫 Преподаватель</h3>
+                    <h3>Преподаватель</h3>
                     <p><strong>${club.teacher?.full_name || 'Не указан'}</strong></p>
                     <p>${club.teacher?.info || ''}</p>
                 </div>
                 <div class="info-section">
-                    <h3>📅 Расписание</h3>
+                    <h3>Расписание</h3>
                     ${club.schedule && club.schedule.length > 0
                         ? `<ul class="schedule-list">${club.schedule.map(s => `<li>📌 ${getDayName(s.day_of_week)} ${s.start_time}–${s.end_time} (${s.room})</li>`).join('')}</ul>`
                         : '<p>Расписание уточняется</p>'}
                 </div>
                 <div class="info-section">
-                    <h3>🎯 Места</h3>
+                    <h3>Места</h3>
                     <p>Занято: ${club.current_seats} / ${club.total_seats}</p>
                     <p>Свободно: ${club.available_seats}</p>
                 </div>
@@ -325,11 +325,11 @@ function enrollInClub(studentId, clubId, clubName) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            alert(`✅ ${data.message}`);
+            alert(`${data.message}`);
             // Обновляем список кружков, чтобы обновить счетчик мест
             loadClubsFromAPI();
         } else {
-            alert(`❌ Ошибка: ${data.error || 'Не удалось записаться'}`);
+            alert(`Ошибка: ${data.error || 'Не удалось записаться'}`);
         }
     })
     .catch(error => {

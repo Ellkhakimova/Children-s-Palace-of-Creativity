@@ -95,7 +95,7 @@
     <div class="main-content">
         <div class="account-container">
             <div class="account-header">
-                <h2>📋 Личный кабинет</h2>
+                <h2>Личный кабинет</h2>
             </div>
 
             <div class="account-info" id="userInfo">
@@ -122,17 +122,17 @@
             </div>
 
             <div class="my-clubs">
-                <h3>🎯 Мои кружки</h3>
+                <h3>Мои кружки</h3>
                 <div id="myClubsList">
                     <div class="empty-message">Загрузка...</div>
                 </div>
             </div>
 
             <div class="btn-container">
-                <a href="{% url 'schedule' %}" class="schedule-link">📅 Моё расписание</a>
+                <a href="{% url 'schedule' %}" class="schedule-link">Моё расписание</a>
             </div>
 
-            <button class="logout-btn" onclick="logout()">🚪 Выйти</button>
+            <button class="logout-btn" onclick="logout()">Выйти</button>
         </div>
     </div>
 
@@ -140,15 +140,15 @@
         <div class="footer-container">
             <div class="footer-section">
                 <h3>Контакты</h3>
-                <p>📞 Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
-                <p>✉️ Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
-                <p>🏠 Адрес: г. Название, ул. Примерная, д. 1</p>
+                <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                <p>Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
+                <p>Адрес: г. Название, ул. Примерная, д. 1</p>
             </div>
             <div class="footer-section">
                 <h3>Режим работы</h3>
-                <p>🕐 Пн-Пт: 09:00 - 20:00</p>
-                <p>🕐 Сб: 10:00 - 16:00</p>
-                <p>🕐 Вс: выходной</p>
+                <p>Пн-Пт: 09:00 - 20:00</p>
+                <p>Сб: 10:00 - 16:00</p>
+                <p>Вс: выходной</p>
             </div>
             <div class="footer-section">
                 <h3>О нас</h3>
@@ -196,14 +196,14 @@
         function loadStudentClubs(clubs) {
             const container = document.getElementById('myClubsList');
             if (!clubs || clubs.length === 0) {
-                container.innerHTML = '<div class="empty-message">✨ Вы ещё не записаны ни на один кружок</div>';
+                container.innerHTML = '<div class="empty-message">Вы ещё не записаны ни на один кружок</div>';
                 return;
             }
             container.innerHTML = clubs.map(club => `
                 <div class="club-item" data-club-id="${club.id}" data-club-name="${club.name}">
                     <div class="club-info">
-                        <span class="club-name">🎨 ${club.name}</span>
-                        <span class="club-age">📅 Возраст: ${club.min_age}–${club.max_age} лет</span>
+                        <span class="club-name">${club.name}</span>
+                        <span class="club-age">Возраст: ${club.min_age}–${club.max_age} лет</span>
                     </div>
                     <button class="btn-cancel" onclick="cancelEnrollment(${club.id}, '${club.name}')">Отменить записть</button>
                 </div>
@@ -211,7 +211,7 @@
         }
 
         function cancelEnrollment(clubId, clubName) {
-            if (confirm(`❓ Вы уверены, что хотите отменить запись на кружок «${clubName}»?`)) {
+            if (confirm(`Вы уверены, что хотите отменить запись на кружок «${clubName}»?`)) {
                 const csrftoken = getCookie('csrftoken');
 
                 fetch(`/api/students/${studentId}/cancel_enroll/`, {
@@ -225,10 +225,10 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        alert(`✅ ${data.message}`);
+                        alert(`${data.message}`);
                         loadStudentData(); // Обновляем список кружков
                     } else {
-                        alert(`❌ Ошибка: ${data.error || 'Не удалось отменить запись'}`);
+                        alert(`Ошибка: ${data.error || 'Не удалось отменить запись'}`);
                     }
                 })
                 .catch(error => {
