@@ -4,18 +4,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Детский дворец творчества</title>
-
+    <title>{{ teacher.full_name }} | Дворец творчества</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Подключаем CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <style>
+        .teacher-detail-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .teacher-profile {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .teacher-profile-header {
+            background: linear-gradient(135deg, #4a6fa5 0%, #3a5a8a 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .teacher-profile-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .teacher-profile-body {
+            padding: 40px;
+        }
+        .info-block {
+            margin-bottom: 30px;
+        }
+        .info-block h3 {
+            color: #4a6fa5;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        .club-list {
+            display: grid;
+            gap: 20px;
+        }
+        .club-card {
+            border-left: 4px solid #4a6fa5;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+        .club-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .club-card p {
+            color: #666;
+            margin: 5px 0;
+        }
+        .back-btn {
+            display: inline-block;
+            background: #4a6fa5;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .back-btn:hover {
+            background: #3a5a8a;
+        }
+    </style>
 </head>
 <body>
-
-    <!-- Верхняя панель: название слева, вход справа -->
+    
     <div class="top-bar">
         <div class="top-bar-container">
             <div class="logo-area">
@@ -34,54 +97,56 @@
         </div>
     </div>
 
-    <!-- ГЛАВНЫЙ БЛОК: фото слева, текст справа -->
-    <div class="hero-section">
-        <div class="hero-container">
-            <div class="hero-image">
-                <img src="{% static 'core/images/little-girl-learning-how-paint.jpg' %}" alt="Девочка рисует">
+    <div class="back-home-container">
+        <a href="{% url 'teachers_list' %}" class="back-home-btn">← Ко всем преподавателям</a>
+    </div>
+
+    <div class="teacher-detail-container">
+        <div class="teacher-profile">
+            <div class="teacher-profile-header">
+                <img src="{% static 'core/images/teacher.png' %}" alt="{{ teacher.full_name }}" style="width: 120px; height: 120px; object-fit: cover; margin: 0 auto 10px; display: block;">
+                <h1>{{ teacher.full_name }}</h1>
+                <p> {{ teacher.phone }}</p>
             </div>
-            <div class="hero-content">
-                <h2>Раскрываем таланты <span class="highlight">с 2010 года</span></h2>
-                <p class="hero-description">
-                    Детский дворец творчества — это место, где каждый ребенок находит себя.
-                    Более <strong>30 кружков и секций</strong>: рисование, музыка, танцы, робототехника, театр и многое другое.
-                </p>
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-number">1000+</span>
-                        <span class="stat-label">довольных родителей</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">30+</span>
-                        <span class="stat-label">кружков и секций</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">15</span>
-                        <span class="stat-label">лет опыта</span>
+            
+            <div class="teacher-profile-body">
+                <div class="info-block">
+                    <h3> О преподавателе</h3>
+                    <p>{{ teacher.info|linebreaks }}</p>
+                </div>
+                
+                <div class="info-block">
+                    <h3> Ведёт кружки</h3>
+                    <div class="club-list">
+                        {% for club in clubs %}
+                        <div class="club-card">
+                            <h4>{{ club.name }}</h4>
+                            <p>{{ club.description }}</p>
+                            <p> Возраст: {{ club.min_age }}-{{ club.max_age }} лет</p>
+                            <p> Мест: {{ club.current_seats }}/{{ club.total_seats }}</p>
+                        </div>
+                        {% empty %}
+                        <p style="color: #999;">Пока не ведёт кружки</p>
+                        {% endfor %}
                     </div>
                 </div>
-                <a href="{% url 'activities' %}" class="btn-primary">
-                    Записаться на кружок
-                    <img src="{% static 'core/images/стрелка_переход.png' %}" alt="→">
-                </a>
             </div>
         </div>
     </div>
 
-    <!-- ПОДВАЛ (footer) -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
                 <h3>Контакты</h3>
-                <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
-                <p>Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
-                <p>Адрес: г. Название, ул. Примерная, д. 1</p>
+                <p> Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                <p> Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
+                <p> Адрес: г. Название, ул. Примерная, д. 1</p>
             </div>
             <div class="footer-section">
                 <h3>Режим работы</h3>
-                <p>Пн-Пт: 09:00 - 20:00</p>
-                <p>Сб: 10:00 - 16:00</p>
-                <p>Вс: выходной</p>
+                <p> Пн-Пт: 09:00 - 20:00</p>
+                <p> Сб: 10:00 - 16:00</p>
+                <p> Вс: выходной</p>
             </div>
             <div class="footer-section">
                 <h3>О нас</h3>
@@ -93,11 +158,10 @@
         </div>
     </footer>
 
-    <!-- Модальное окно -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
-
+            
             <div id="loginForm" class="form-container">
                 <h2>Вход</h2>
                 <form onsubmit="handleLogin(event)">
@@ -115,7 +179,7 @@
                     Нет аккаунта? <a onclick="showRegister()">Зарегистрироваться</a>
                 </div>
             </div>
-
+            
             <div id="registerForm" class="form-container hidden-form">
                 <h2>Регистрация</h2>
                 <form onsubmit="handleRegister(event)">

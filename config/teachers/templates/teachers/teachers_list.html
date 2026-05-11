@@ -4,18 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Детский дворец творчества</title>
-
+    <title>Преподаватели | Дворец творчества</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Подключаем CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
 </head>
 <body>
-
-    <!-- Верхняя панель: название слева, вход справа -->
+    
     <div class="top-bar">
         <div class="top-bar-container">
             <div class="logo-area">
@@ -34,54 +32,61 @@
         </div>
     </div>
 
-    <!-- ГЛАВНЫЙ БЛОК: фото слева, текст справа -->
-    <div class="hero-section">
-        <div class="hero-container">
-            <div class="hero-image">
-                <img src="{% static 'core/images/little-girl-learning-how-paint.jpg' %}" alt="Девочка рисует">
-            </div>
-            <div class="hero-content">
-                <h2>Раскрываем таланты <span class="highlight">с 2010 года</span></h2>
-                <p class="hero-description">
-                    Детский дворец творчества — это место, где каждый ребенок находит себя.
-                    Более <strong>30 кружков и секций</strong>: рисование, музыка, танцы, робототехника, театр и многое другое.
-                </p>
-                <div class="stats">
-                    <div class="stat-item">
-                        <span class="stat-number">1000+</span>
-                        <span class="stat-label">довольных родителей</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">30+</span>
-                        <span class="stat-label">кружков и секций</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number">15</span>
-                        <span class="stat-label">лет опыта</span>
-                    </div>
-                </div>
-                <a href="{% url 'activities' %}" class="btn-primary">
-                    Записаться на кружок
-                    <img src="{% static 'core/images/стрелка_переход.png' %}" alt="→">
+    <div class="back-home-container">
+        <a href="{% url 'index' %}" class="back-home-btn">← На главную</a>
+    </div>
+
+    <div class="main-content">
+        <h1 class="page-title">Наши преподаватели</h1>
+        <p style="text-align: center; margin-bottom: 40px; color: #666;">Профессионалы, которые любят своё дело</p>
+
+        <div class="activities-grid">
+            {% for teacher in teachers %}
+            <div class="activity-card">
+                <img src="{% static 'core/images/teacher.png' %}" alt="{{ teacher.full_name }}" style="width: 90px; height: 90px; object-fit: cover; margin: 0 auto 15px; display: block;">
+                <h3>{{ teacher.full_name }}</h3>
+                <div class="activity-age"> {{ teacher.phone }}</div>
+                
+                {% with clubs=teacher.club_set.all %}
+                    {% if clubs %}
+                        <div class="activity-description">
+                            <strong>Ведёт кружки:</strong><br>
+                            {% for club in clubs %}
+                                • {{ club.name }}<br>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="activity-description" style="color: #999;">
+                            Пока не ведёт кружки
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                
+                <a href="{% url 'teacher_detail' teacher.id %}" class="btn-signup" style="display: inline-block; text-decoration: none;">
+                    Подробнее →
                 </a>
             </div>
+            {% empty %}
+            <div style="text-align: center; grid-column: 1/-1;">
+                <p>Пока нет преподавателей</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
 
-    <!-- ПОДВАЛ (footer) -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
                 <h3>Контакты</h3>
-                <p>Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
-                <p>Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
-                <p>Адрес: г. Название, ул. Примерная, д. 1</p>
+                <p> Телефон: <a href="tel:+71234567890">+7 (123) 456-78-90</a></p>
+                <p> Email: <a href="mailto:palace@dtc.ru">palace@dtc.ru</a></p>
+                <p> Адрес: г. Название, ул. Примерная, д. 1</p>
             </div>
             <div class="footer-section">
                 <h3>Режим работы</h3>
-                <p>Пн-Пт: 09:00 - 20:00</p>
-                <p>Сб: 10:00 - 16:00</p>
-                <p>Вс: выходной</p>
+                <p> Пн-Пт: 09:00 - 20:00</p>
+                <p> Сб: 10:00 - 16:00</p>
+                <p> Вс: выходной</p>
             </div>
             <div class="footer-section">
                 <h3>О нас</h3>
@@ -93,11 +98,10 @@
         </div>
     </footer>
 
-    <!-- Модальное окно -->
     <div id="authModal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
-
+            
             <div id="loginForm" class="form-container">
                 <h2>Вход</h2>
                 <form onsubmit="handleLogin(event)">
@@ -115,7 +119,7 @@
                     Нет аккаунта? <a onclick="showRegister()">Зарегистрироваться</a>
                 </div>
             </div>
-
+            
             <div id="registerForm" class="form-container hidden-form">
                 <h2>Регистрация</h2>
                 <form onsubmit="handleRegister(event)">
