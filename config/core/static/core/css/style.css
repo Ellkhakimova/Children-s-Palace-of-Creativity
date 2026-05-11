@@ -70,6 +70,8 @@ body {
 
 .auth-area {
     flex-shrink: 0;
+    display: flex;
+    gap: 25px;  
 }
 
 .btn-auth {
