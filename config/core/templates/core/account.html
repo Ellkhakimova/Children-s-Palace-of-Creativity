@@ -83,7 +83,11 @@
                 <a href="{% url 'activities' %}" class="btn-auth">Кружки</a>
                 <a href="{% url 'teachers_list' %}" class="btn-auth">Преподаватели</a>
                 {% if user.is_authenticated %}
-                    <a href="{% url 'account' %}" class="btn-auth">Аккаунт</a>
+                    {% if user.teacher_profile %}
+                        <a href="{% url 'teacher_dashboard' %}" class="btn-auth">Аккаунт</a>
+                    {% else %}
+                        <a href="{% url 'account' %}" class="btn-auth">Аккаунт</a>
+                    {% endif %}
                 {% else %}
                     <a href="#" onclick="openModal(); return false;" class="btn-auth">Вход</a>
                 {% endif %}

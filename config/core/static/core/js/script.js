@@ -124,30 +124,56 @@ function handleLogin(event) {
         credentials: 'same-origin',
         body: JSON.stringify({ username: username, password: password })
     })
-    .then(response => {
-        if (response.ok) {
-            console.log('LOGIN OK');
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
             alert(`Добро пожаловать, ${username}!`);
             closeModal();
 
-            // Сохраняем имя пользователя
+            // Сохраняем данные
             localStorage.setItem('username', username);
+            localStorage.setItem('role', data.role);
+            localStorage.setItem('roleId', data.role_id);
 
-            // Получаем student_id по username и ПОТОМ перенаправляем
-            fetchStudentByUsername(username);
-
-            // Даем время сохраниться ID перед переходом
-            setTimeout(() => {
-                window.location.href = '/account/';
-            }, 500);
+            // Перенаправляем в зависимости от роли
+            if (data.role === 'teacher') {
+                window.location.href = '/teacher/dashboard/';
+            } else {
+                // Для студента получаем student_id и перенаправляем
+                fetchStudentByUsername(username, () => {
+                    window.location.href = '/account/';
+                });
+            }
         } else {
-            alert('Неверное имя пользователя или пароль');
+            alert('Ошибка: ' + (data.error || 'Неверный логин или пароль'));
         }
     })
     .catch(error => {
         console.error('Ошибка:', error);
         alert('Произошла ошибка при входе');
     });
+}
+
+function fetchStudentByUsername(username, callback) {
+    console.log('Ищем студента с username:', username);
+
+    fetch('/api/students/')
+        .then(response => response.json())
+        .then(data => {
+            const students = data.results || data;
+            const student = students.find(s => s.user?.username === username);
+
+            if (student) {
+                localStorage.setItem('studentId', student.id);
+                localStorage.setItem('userId', student.user?.id);
+                console.log('Student ID сохранен:', student.id);
+                if (callback) callback();
+            } else {
+                console.error('Студент не найден для username:', username);
+                window.location.href = '/';
+            }
+        })
+        .catch(error => console.error('Ошибка получения студента:', error));
 }
 
 // ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
@@ -372,3 +398,4 @@ window.onclick = function(event) {
         closeInfoModal();
     }
 }
+

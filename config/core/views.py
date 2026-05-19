@@ -73,8 +73,10 @@ def logout(request):
     return JsonResponse({'success': True, 'message': 'Выход выполнен'})
 
 
+@csrf_exempt
+@require_http_methods(["POST"])
 def api_login(request):
-    """API для входа через fetch"""
+    """API для входа через fetch (универсальный для учеников и преподавателей)"""
     try:
         data = json.loads(request.body)
         username = data.get('username')
@@ -84,7 +86,25 @@ def api_login(request):
 
         if user is not None:
             auth_login(request, user)
-            return JsonResponse({'success': True, 'message': 'Вход выполнен'})
+
+            # Определяем роль пользователя
+            role = 'student'
+            role_id = None
+
+            if hasattr(user, 'teacher_profile') and user.teacher_profile:
+                role = 'teacher'
+                role_id = user.teacher_profile.id
+            elif hasattr(user, 'student'):
+                role = 'student'
+                role_id = user.student.id
+
+            return JsonResponse({
+                'success': True,
+                'message': 'Вход выполнен',
+                'role': role,
+                'role_id': role_id,
+                'username': user.username
+            })
         else:
             return JsonResponse({'error': 'Неверный логин или пароль'}, status=400)
     except Exception as e:
@@ -103,6 +123,9 @@ def account(request):
 
 def schedule(request):
     return render(request, 'core/schedule.html')
+
+def teacher_dashboard(request):
+    return render(request, 'core/teacher_dashboard.html')
 
 from django.contrib.auth import logout as auth_logout
 

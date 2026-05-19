@@ -4,13 +4,10 @@ from datetime import date
 
 
 class Teacher(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='teacher_profile')
     full_name = models.CharField(max_length=100)
     info = models.TextField()
     phone = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.full_name
-
 
 class Club(models.Model):
     name = models.CharField(max_length=100)

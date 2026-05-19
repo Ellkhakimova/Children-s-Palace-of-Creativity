@@ -1,0 +1,314 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель преподавателя | Детский дворец творчества</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <style>
+        /* все твои стили остаются как были */
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .dashboard-header {
+            text-align: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .dashboard-header h2 {
+            font-family: 'CartonSixRUS-Regular', cursive;
+            color: #2c3e50;
+            font-size: 32px;
+        }
+        .profile-info {
+            background: #f9f5f0;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+        .info-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0d6cc;
+        }
+        .info-label {
+            width: 140px;
+            font-weight: 700;
+            color: #DDB571;
+        }
+        .info-value {
+            flex: 1;
+            color: #333;
+        }
+        .edit-btn, .save-btn {
+            background: #DDB571;
+            color: #2C2C2C;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .edit-btn:hover, .save-btn:hover {
+            background: #C49A6C;
+        }
+        .my-clubs-section {
+            margin-top: 30px;
+        }
+        .my-clubs-section h3 {
+            font-family: 'CartonSixRUS-Regular', cursive;
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .club-item {
+            background: #f9f5f0;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+        }
+        .club-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #DDB571;
+        }
+        .club-details {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            width: 100%;
+            margin-top: 30px;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            background: #f9f9f9;
+            border-radius: 16px;
+            color: #999;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+<!-- НАВИГАЦИЯ ТОЛЬКО С ЛОГОТИПОМ И КНОПКОЙ ВЫЙТИ -->
+<div class="top-bar">
+    <div class="top-bar-container">
+        <div class="logo-area">
+            <h1>Детский дворец творчества</h1>
+        </div>
+        <div class="auth-area">
+    <a href="#" onclick="logout(); return false;" class="btn-auth">Выйти</a>
+</div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h2> Панель преподавателя</h2>
+        </div>
+
+        <div id="profileContainer">
+            <!-- Режим просмотра -->
+            <div class="profile-info" id="profileView">
+                <h3 style="margin-bottom: 15px;"> Мой профиль</h3>
+                <div class="info-row">
+                    <div class="info-label">ФИО:</div>
+                    <div class="info-value" id="viewFullName">—</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">Телефон:</div>
+                    <div class="info-value" id="viewPhone">—</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">О себе:</div>
+                    <div class="info-value" id="viewInfo">—</div>
+                </div>
+                <button class="edit-btn" onclick="enableEditMode()"> Редактировать профиль</button>
+            </div>
+
+            <!-- Режим редактирования -->
+            <div id="profileEdit" style="display: none;">
+                <div class="profile-info">
+                    <h3 style="margin-bottom: 15px;"> Редактирование профиля</h3>
+                    <div class="info-row">
+                        <div class="info-label">ФИО:</div>
+                        <div class="info-value"><input type="text" id="editFullName" class="edit-field"></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Телефон:</div>
+                        <div class="info-value"><input type="text" id="editPhone" class="edit-field"></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">О себе:</div>
+                        <div class="info-value"><textarea id="editInfo" rows="4"></textarea></div>
+                    </div>
+                    <button class="save-btn" onclick="saveProfile()">Сохранить</button>
+                    <button class="edit-btn" onclick="cancelEdit()" style="margin-left: 10px;"> Отмена</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Мои кружки -->
+        <div class="my-clubs-section">
+            <h3> Мои кружки</h3>
+            <div id="myClubsList">
+                <div class="loading">Загрузка кружков...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const role = localStorage.getItem('role');
+    const roleId = localStorage.getItem('roleId');
+
+    if (role !== 'teacher') {
+        window.location.href = '/';
+    }
+
+    function loadTeacherProfile() {
+        fetch(`/api/teachers/${roleId}/`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('viewFullName').textContent = data.full_name || '—';
+                document.getElementById('viewPhone').textContent = data.phone || '—';
+                document.getElementById('viewInfo').textContent = data.info || '—';
+                document.getElementById('editFullName').value = data.full_name || '';
+                document.getElementById('editPhone').value = data.phone || '';
+                document.getElementById('editInfo').value = data.info || '';
+                loadTeacherClubs();
+            })
+            .catch(error => console.error('Ошибка загрузки профиля:', error));
+    }
+
+    function loadTeacherClubs() {
+        fetch(`/api/clubs/`)
+            .then(response => response.json())
+            .then(data => {
+                const clubs = data.results || data;
+                const myClubs = clubs.filter(club => club.teacher?.id == roleId);
+                const container = document.getElementById('myClubsList');
+                if (myClubs.length === 0) {
+                    container.innerHTML = '<div class="empty-message">У вас пока нет закреплённых кружков</div>';
+                    return;
+                }
+                container.innerHTML = myClubs.map(club => `
+                    <div class="club-item">
+                        <div class="club-name"> ${club.name}</div>
+                        <div class="club-details"> Мест: ${club.current_seats || 0}/${club.total_seats} |  Возраст: ${club.min_age}–${club.max_age} лет</div>
+                        <div class="club-details"> ${club.description.substring(0, 100)}${club.description.length > 100 ? '...' : ''}</div>
+                    </div>
+                `).join('');
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки кружков:', error);
+                document.getElementById('myClubsList').innerHTML = '<div class="error-message">Ошибка загрузки кружков</div>';
+            });
+    }
+
+    function enableEditMode() {
+        document.getElementById('profileView').style.display = 'none';
+        document.getElementById('profileEdit').style.display = 'block';
+    }
+
+    function cancelEdit() {
+        document.getElementById('profileView').style.display = 'block';
+        document.getElementById('profileEdit').style.display = 'none';
+    }
+
+    function saveProfile() {
+        const updatedData = {
+            full_name: document.getElementById('editFullName').value,
+            phone: document.getElementById('editPhone').value,
+            info: document.getElementById('editInfo').value
+        };
+        fetch(`/api/teachers/${roleId}/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(updatedData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.id) {
+                alert(' Профиль успешно обновлён!');
+                loadTeacherProfile();
+                cancelEdit();
+            } else {
+                alert(' Ошибка при обновлении');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка при сохранении');
+        });
+    }
+
+    function logout() {
+        fetch('/api/logout/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') }
+        })
+        .then(() => {
+            localStorage.removeItem('role');
+            localStorage.removeItem('roleId');
+            localStorage.removeItem('username');
+            localStorage.removeItem('studentId');
+            window.location.href = '/';
+        });
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    loadTeacherProfile();
+</script>
+
+</body>
+</html>
