@@ -2,11 +2,12 @@ from rest_framework import viewsets, status, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
-from .models import Teacher, Club, Student, Schedule
+from .models import Teacher, Club, Student, Schedule, Homework
 from .serializers import (
     TeacherSerializer, ClubSerializer, StudentSerializer,
-    StudentCreateSerializer, ScheduleSerializer, EnrollSerializer
+    StudentCreateSerializer, ScheduleSerializer, EnrollSerializer, HomeworkSerializer
 )
 
 
@@ -240,3 +241,43 @@ class StudentViewSet(viewsets.ModelViewSet):
             'message': f'Запись на кружок "{club.name}" отменена'
         }, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['get'])
+    def schedule(self, request, pk=None):
+        """Получить расписание для студента"""
+        student = self.get_object()
+        clubs = student.clubs.all()
+        schedule_items = []
+
+        for club in clubs:
+            for schedule in club.schedule_set.all():
+                schedule_items.append({
+                    'id': schedule.id,
+                    'day_of_week': schedule.day_of_week,
+                    'start_time': schedule.start_time.strftime('%H:%M'),
+                    'end_time': schedule.end_time.strftime('%H:%M'),
+                    'room': schedule.room,
+                    'club_name': club.name,
+                    'club_id': club.id,
+                    'teacher_name': club.teacher.full_name if club.teacher else '',
+                })
+
+        # Сортируем по дню недели и времени
+        day_order = {'Mon': 0, 'Tue': 1, 'Wed': 2, 'Thu': 3, 'Fri': 4, 'Sat': 5, 'Sun': 6}
+        schedule_items.sort(key=lambda x: (day_order.get(x['day_of_week'], 7), x['start_time']))
+
+        return Response(schedule_items)
+
+class HomeworkAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        schedule_id = request.query_params.get('schedule_id')
+        student_id = request.query_params.get('student_id')
+        if schedule_id and student_id:
+            try:
+                homework = Homework.objects.get(schedule_id=schedule_id, student_id=student_id)
+                serializer = HomeworkSerializer(homework)
+                return Response(serializer.data)
+            except Homework.DoesNotExist:
+                return Response({'error': 'Нет домашнего задания'}, status=404)
+        return Response({'error': 'Не указаны параметры'}, status=400)

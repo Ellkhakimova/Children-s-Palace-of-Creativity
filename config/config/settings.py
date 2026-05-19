@@ -11,8 +11,6 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
-import pymysql
-pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'core',
-    'teachers'
+    'teachers',
 ]
 
 MIDDLEWARE = [
@@ -82,9 +80,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Childrens_Palace',
         'USER': 'root',
-        'PASSWORD': 'khakimova29!',
+        'PASSWORD': 'J14y2024!',
         'HOST': 'localhost',
-        'PORT': '44423',
+        'PORT': '3306',
     }
 }
 

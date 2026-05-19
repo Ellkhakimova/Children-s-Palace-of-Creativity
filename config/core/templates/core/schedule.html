@@ -9,6 +9,135 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <style>
+        /* Стили для модального окна домашнего задания */
+        .homework-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .homework-modal.active {
+            display: flex;
+        }
+        .homework-modal-content {
+            background-color: #fff;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .homework-modal-content h3 {
+            color: #E3950B;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .homework-modal-content .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            transition: 0.3s;
+        }
+        .homework-modal-content .close-modal:hover {
+            color: #E3950B;
+        }
+        .homework-due-date {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 10px;
+            padding: 8px;
+            background: #ffe6e6;
+            border-radius: 10px;
+        }
+        .homework-empty {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+        }
+        .homework-link {
+            display: inline-block;
+            background-color: #4caf50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            border: none;
+        }
+        .homework-link:hover {
+            background-color: #45a049;
+            transform: scale(1.02);
+        }
+        .schedule-lesson {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .schedule-lesson:last-child {
+            border-bottom: none;
+        }
+        .lesson-name {
+            font-weight: bold;
+            color: #E3950B;
+        }
+        .lesson-room, .lesson-teacher, .lesson-time {
+            font-size: 12px;
+            color: #666;
+            margin-top: 3px;
+        }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #eee;
+            padding: 12px;
+            text-align: center;
+            vertical-align: top;
+        }
+        .schedule-table th {
+            background-color: #E3950B;
+            color: white;
+            font-weight: 600;
+        }
+        .time-column {
+            background-color: #f9f5f0;
+            font-weight: 600;
+        }
+        .empty-schedule {
+            color: #ccc;
+        }
+        .loading, .error-message {
+            text-align: center;
+            padding: 40px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #E3950B;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 
@@ -37,13 +166,23 @@
     <div class="main-content">
         <div class="schedule-container">
             <div class="schedule-header">
-                <h2>Расписание на неделю</h2>
+                <h2>📅 Расписание на неделю</h2>
             </div>
             <div id="scheduleContainer">
                 <div class="loading">Загрузка расписания...</div>
             </div>
             <div style="text-align: center;">
                 <a href="{% url 'account' %}" class="back-link">← Вернуться в личный кабинет</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для домашнего задания -->
+    <div id="homeworkModal" class="homework-modal">
+        <div class="homework-modal-content">
+            <span class="close-modal" onclick="closeHomeworkModal()">&times;</span>
+            <div id="homeworkContent">
+                <div class="homework-empty">Загрузка...</div>
             </div>
         </div>
     </div>
@@ -64,7 +203,7 @@
             </div>
             <div class="footer-section">
                 <h3>О нас</h3>
-                <p>Дворец детского творчества — место, где каждый ребенок может раскрыть свой талант. Мы предлагаем более 30 кружков и секций для детей от 4 до 18 лет.</p>
+                <p>Дворец детского творчества — место, где каждый ребенок может раскрыть свой талант.</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -87,7 +226,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (!data || data.length === 0) {
-                        container.innerHTML = '<div class="empty-schedule">У вас пока нет занятий. Запишитесь на кружки!</div>';
+                        container.innerHTML = '<div class="empty-schedule">✨ У вас пока нет занятий. Запишитесь на кружки!</div>';
                         return;
                     }
                     buildScheduleTable(data, container);
@@ -108,21 +247,27 @@
                 { code: 'Sat', name: 'Суббота' },
                 { code: 'Sun', name: 'Воскресенье' }
             ];
+
             const scheduleByDay = {};
             days.forEach(day => { scheduleByDay[day.code] = []; });
+
             scheduleItems.forEach(item => {
                 if (scheduleByDay[item.day_of_week]) {
                     scheduleByDay[item.day_of_week].push(item);
                 }
             });
+
             for (let day in scheduleByDay) {
                 scheduleByDay[day].sort((a, b) => a.start_time.localeCompare(b.start_time));
             }
+
             const allTimes = [...new Set(scheduleItems.map(item => item.start_time))].sort();
 
-            let html = '<div style="overflow-x: auto;"><table class="schedule-table"><thead><tr><th>Время</th>';
+            let html = '<div style="overflow-x: auto;"><table class="schedule-table">';
+            html += '<thead><tr><th>Время</th>';
             days.forEach(day => { html += `<th>${day.name}</th>`; });
             html += '</tr></thead><tbody>';
+
             if (allTimes.length === 0) {
                 html += `<tr><td colspan="8" class="empty-schedule">Нет занятий</td></tr>`;
             } else {
@@ -137,8 +282,9 @@
                                     <div class="schedule-lesson">
                                         <div class="lesson-name">${lesson.club_name}</div>
                                         <div class="lesson-room">📍 ${lesson.room}</div>
-                                        <div class="lesson-teacher"> ${lesson.teacher_name || 'Преподаватель'}</div>
-                                        <div class="lesson-time"> ${lesson.start_time}–${lesson.end_time}</div>
+                                        <div class="lesson-teacher">👩‍🏫 ${lesson.teacher_name || 'Преподаватель'}</div>
+                                        <div class="lesson-time">🕐 ${lesson.start_time}–${lesson.end_time}</div>
+                                        <button class="homework-link" onclick="openHomeworkModal(${lesson.id}, '${lesson.club_name.replace(/'/g, "\\'")}')">📖 Домашнее задание</button>
                                     </div>
                                 `;
                             });
@@ -150,8 +296,48 @@
                     html += `</tr>`;
                 });
             }
+
             html += '</tbody></table></div>';
             container.innerHTML = html;
+        }
+
+        function openHomeworkModal(scheduleId, clubName) {
+            const modal = document.getElementById('homeworkModal');
+            const content = document.getElementById('homeworkContent');
+
+            content.innerHTML = '<div class="homework-empty">📖 Загружаем домашнее задание...</div>';
+            modal.classList.add('active');
+
+            fetch(`/api/homework/?schedule_id=${scheduleId}&student_id=${studentId}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Нет домашнего задания');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error || !data.title) {
+                        content.innerHTML = `
+                            <div class="homework-empty">📭 Домашнего задания по кружку <strong>${clubName}</strong> пока нет</div>
+                            <div class="homework-empty">✨ Задание появится здесь, когда его добавит преподаватель ✨</div>
+                        `;
+                    } else {
+                        content.innerHTML = `
+                            <h3>📖 ${data.title}</h3>
+                            <p>${data.description || 'Описание отсутствует'}</p>
+                            ${data.due_date ? `<div class="homework-due-date">📅 Срок сдачи: ${data.due_date}</div>` : ''}
+                        `;
+                    }
+                })
+                .catch(error => {
+                    content.innerHTML = `
+                        <div class="homework-empty">📭 Домашнего задания по кружку <strong>${clubName}</strong> пока нет</div>
+                        <div class="homework-empty">✨ Задание появится здесь, когда его добавит преподаватель ✨</div>
+                    `;
+                });
+        }
+
+        function closeHomeworkModal() {
+            const modal = document.getElementById('homeworkModal');
+            modal.classList.remove('active');
         }
     </script>
 </body>

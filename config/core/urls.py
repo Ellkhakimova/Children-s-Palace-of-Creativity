@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views_api import TeacherViewSet, ClubViewSet, StudentViewSet, ScheduleViewSet
+from .views_api import TeacherViewSet, ClubViewSet, StudentViewSet, ScheduleViewSet, HomeworkAPIView
 from . import views
 
 router = DefaultRouter()
@@ -21,4 +21,5 @@ urlpatterns = [
     path('api/login/', views.api_login, name='api_login'),
     path('api/logout/', views.api_logout, name='api_logout'),
     path('api-auth/', include('rest_framework.urls')),
+    path('api/homework/', HomeworkAPIView.as_view(), name='api_homework'),
 ]

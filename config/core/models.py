@@ -85,3 +85,17 @@ class Schedule(models.Model):
 
     def __str__(self):
         return f"{self.club.name} - {self.day_of_week}"
+
+class Homework(models.Model):
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, related_name='homeworks')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='homeworks')
+    title = models.CharField(max_length=200, verbose_name='Тема')
+    description = models.TextField(blank=True, verbose_name='Задание')
+    due_date = models.DateField(null=True, blank=True, verbose_name='Срок сдачи')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['schedule', 'student']
+
+    def __str__(self):
+        return f'{self.schedule.club.name} - {self.student.full_name}'

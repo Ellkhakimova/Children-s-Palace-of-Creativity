@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from datetime import date
-from .models import Teacher, Club, Student, Schedule
+from .models import Teacher, Club, Student, Schedule, Homework
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -200,3 +200,8 @@ class EnrollSerializer(serializers.Serializer):
             raise serializers.ValidationError("Кружок не найден")
         self.context['club'] = club
         return value
+
+class HomeworkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Homework
+        fields = ['id', 'title', 'description', 'due_date']
