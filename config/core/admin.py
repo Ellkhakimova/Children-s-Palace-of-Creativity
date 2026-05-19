@@ -14,10 +14,12 @@ class ClubAdmin(admin.ModelAdmin):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'user', 'birth_date', 'application_status']
+    list_display = ['full_name', 'user', 'birth_date', 'application_status', 'achievements']
     list_filter = ['application_status', 'clubs']
     search_fields = ['full_name', 'parent_name']
     filter_horizontal = ['clubs']  # Удобный виджет для ManyToMany
+    fields = ['user', 'full_name', 'birth_date', 'parent_name', 'parent_phone', 'clubs', 'application_status',
+              'achievements']
 
 @admin.register(Schedule)
 class ScheduleAdmin(admin.ModelAdmin):

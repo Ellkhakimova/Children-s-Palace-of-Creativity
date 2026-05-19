@@ -49,6 +49,8 @@ class Student(models.Model):
         default='pending'
     )
 
+    achievements = models.TextField(blank=True, verbose_name='Достижения', help_text='Награды, грамоты, успехи ученика')
+
     def __str__(self):
         return self.full_name
 

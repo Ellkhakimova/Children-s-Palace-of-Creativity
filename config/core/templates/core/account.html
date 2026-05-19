@@ -124,6 +124,11 @@
                 </div>
             </div>
 
+            <div class="info-row">
+                <div class="info-label">Мои достижения:</div>
+                <div class="info-value" id="achievements">—</div>
+            </div>
+
             <div class="my-clubs">
                 <h3>Мои кружки</h3>
                 <div id="myClubsList">
@@ -188,12 +193,15 @@
                     document.getElementById('birthDate').textContent = data.birth_date || '—';
                     document.getElementById('parentName').textContent = data.parent_name || '—';
                     document.getElementById('parentPhone').textContent = data.parent_phone || '—';
+                    document.getElementById('achievements').textContent = data.achievements || '—';
                     loadStudentClubs(data.clubs || []);
                 })
                 .catch(error => {
                     console.error(error);
                     document.getElementById('myClubsList').innerHTML = '<div class="error-message">Ошибка загрузки данных</div>';
                 });
+
+
         }
 
         function loadStudentClubs(clubs) {

@@ -85,7 +85,7 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'full_name', 'birth_date', 'age',
             'parent_name', 'parent_phone',
-            'clubs', 'application_status'
+            'clubs', 'application_status', 'achievements'
         ]
 
 
