@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Создать задание</title>
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+    <style>
+        .form-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #DDB571;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 16px;
+        }
+        button {
+            background: #DDB571;
+            color: #2C2C2C;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #C49A6C;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #DDB571;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="top-bar-container">
+        <div class="logo-area"><h1>Детский дворец творчества</h1></div>
+        <div class="auth-area"><a href="#" onclick="logout();" class="btn-auth">Выйти</a></div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="form-container">
+        <h2>Домашнее задание</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_student">Ученик:</label>
+                {{ form.student }}
+            </div>
+            <div class="form-group">
+                <label for="id_title">Название задания:</label>
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                <label for="id_description">Описание:</label>
+                {{ form.description }}
+            </div>
+            <div class="form-group">
+                <label for="id_due_date">Срок сдачи:</label>
+                {{ form.due_date }}
+            </div>
+            <button type="submit"> Сохранить задание</button>
+        </form>
+        <a href="{% url 'teacher_dashboard' %}" class="back-link">← Назад к панели</a>
+    </div>
+</div>
+
+<script>
+    function logout() {
+        fetch('/api/logout/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') }
+        }).then(() => {
+            localStorage.clear();
+            window.location.href = '/';
+        });
+    }
+    function getCookie(name) {
+        let value = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    value = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return value;
+    }
+</script>
+</body>
+</html>

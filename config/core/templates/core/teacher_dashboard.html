@@ -179,13 +179,31 @@
                 </div>
             </div>
         </div>
-
-        <!-- Мои кружки -->
+                <!-- Мои кружки -->
         <div class="my-clubs-section">
             <h3> Мои кружки</h3>
             <div id="myClubsList">
                 <div class="loading">Загрузка кружков...</div>
             </div>
+        </div>
+
+        <!-- Мои задания (новый блок) -->
+        <div class="my-assignments-section" style="margin-top: 40px;">
+            <a href="{% url 'create_assignment' %}" class="btn" style="background: #DDB571; padding: 10px 20px; border-radius: 25px; text-decoration: none; color: #2C2C2C; display: inline-block; margin-bottom: 20px;">Создать задание</a>
+
+            <h3>Мои задания</h3>
+            <ul>
+                {% for assignment in teacher.assignments.all %}
+                    <li style="background: #f9f5f0; margin-bottom: 15px; padding: 15px; border-radius: 15px; list-style: none;">
+                        <strong>{{ assignment.title }}</strong> — для {{ assignment.student.full_name }}<br>
+                        Текст: {{ assignment.description }}<br>
+                        Срок: {{ assignment.due_date|date:"d.m.Y H:i" }}<br>
+                        Статус: {{ assignment.get_status_display }}
+                    </li>
+                {% empty %}
+                    <li style="background: #f9f5f0; padding: 15px; border-radius: 15px; list-style: none;">Пока нет заданий</li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>
