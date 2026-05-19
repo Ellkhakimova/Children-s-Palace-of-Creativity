@@ -6,7 +6,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 import json
 from .models import Student
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Teacher, Assignment
+from .forms import AssignmentForm
+from django.contrib.auth import logout as auth_logout  
 
 # Регистрация
 @csrf_exempt
@@ -125,12 +130,26 @@ def schedule(request):
     return render(request, 'core/schedule.html')
 
 def teacher_dashboard(request):
-    return render(request, 'core/teacher_dashboard.html')
-
-from django.contrib.auth import logout as auth_logout
+    teacher = get_object_or_404(Teacher, user=request.user)
+    return render(request, 'core/teacher_dashboard.html', {'teacher': teacher})
 
 @csrf_exempt
 @require_http_methods(["POST"])
 def api_logout(request):
     auth_logout(request)
     return JsonResponse({'success': True, 'message': 'Выход выполнен'})
+
+@login_required
+def create_assignment(request):
+    teacher = get_object_or_404(Teacher, user=request.user)
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST)
+        if form.is_valid():
+            assignment = form.save(commit=False)
+            assignment.teacher = teacher
+            assignment.save()
+            messages.success(request, 'Задание создано')
+            return redirect('teacher_dashboard')
+    else:
+        form = AssignmentForm()
+    return render(request, 'core/create_assignment.html', {'form': form})
